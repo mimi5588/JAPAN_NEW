@@ -1,6 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CalendarDays, Clock, ExternalLink, MapPin, Ticket, Train, WalletCards } from 'lucide-react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import './styles.css';
 
 if ('serviceWorker' in navigator) {
@@ -196,40 +198,6 @@ const nearbyGuide = [
 
 function googleMapsUrl(place){ return `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`; }
 function googleMapsSearchUrl(query){ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`; }
-function osmEmbed(place){ return `https://www.openstreetmap.org/export/embed.html?bbox=${place.lng-0.018}%2C${place.lat-0.012}%2C${place.lng+0.018}%2C${place.lat+0.012}&layer=mapnik&marker=${place.lat}%2C${place.lng}`; }
-
-function getMapPosition(place, visiblePlaces) {
-  const lats = visiblePlaces.map(p => p.lat);
-  const lngs = visiblePlaces.map(p => p.lng);
-  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
-  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
-  const x = maxLng === minLng ? 50 : ((place.lng - minLng) / (maxLng - minLng)) * 82 + 9;
-  const y = maxLat === minLat ? 50 : ((maxLat - place.lat) / (maxLat - minLat)) * 74 + 13;
-  return { left: `${x}%`, top: `${y}%` };
-}
-
-function getSpreadMapPosition(place, visiblePlaces) {
-  const base = getMapPosition(place, visiblePlaces);
-  const baseX = Number.parseFloat(base.left);
-  const baseY = Number.parseFloat(base.top);
-  const closePlaces = visiblePlaces.filter(other => {
-    const otherBase = getMapPosition(other, visiblePlaces);
-    const otherX = Number.parseFloat(otherBase.left);
-    const otherY = Number.parseFloat(otherBase.top);
-    return Math.hypot(baseX - otherX, baseY - otherY) < 9;
-  });
-
-  if (closePlaces.length < 2) return base;
-
-  const sorted = [...closePlaces].sort((a, b) => a.id.localeCompare(b.id));
-  const groupIndex = sorted.findIndex(item => item.id === place.id);
-  const angle = (Math.PI * 2 * groupIndex) / closePlaces.length;
-  const radius = Math.min(14, 7 + closePlaces.length * 1.25);
-  const x = Math.max(7, Math.min(93, baseX + Math.cos(angle) * radius));
-  const y = Math.max(9, Math.min(91, baseY + Math.sin(angle) * radius));
-  return { left: `${x}%`, top: `${y}%` };
-}
-
 function iconForPlace(place) {
   const text = `${place.id} ${place.name} ${place.note}`.toLowerCase();
   if (text.includes('מקדש') || text.includes('shrine') || text.includes('ji') || text.includes('inari') || text.includes('dera')) return '⛩️';
@@ -243,6 +211,80 @@ function iconForPlace(place) {
   if (text.includes('גני') || text.includes('גן')) return '🌸';
   if (text.includes('מעבר') || text.includes('רובע') || text.includes('אודייבה') || text.includes('דוטונבורי')) return '📍';
   return '⭐';
+}
+
+function getMarkerLatLng(place, visiblePlaces) {
+  const closePlaces = visiblePlaces.filter(other => {
+    const latDistance = Math.abs(other.lat - place.lat);
+    const lngDistance = Math.abs(other.lng - place.lng);
+    return latDistance < 0.012 && lngDistance < 0.012;
+  });
+  if (closePlaces.length < 2) return [place.lat, place.lng];
+
+  const sorted = [...closePlaces].sort((a, b) => a.id.localeCompare(b.id));
+  const groupIndex = sorted.findIndex(item => item.id === place.id);
+  const angle = (Math.PI * 2 * groupIndex) / closePlaces.length;
+  const offset = Math.min(0.008, 0.003 + closePlaces.length * 0.00055);
+  return [place.lat + Math.sin(angle) * offset, place.lng + Math.cos(angle) * offset];
+}
+
+function TripMap({ places: visiblePlaces, selectedId, onSelect }) {
+  const mapNodeRef = useRef(null);
+  const mapRef = useRef(null);
+  const markersRef = useRef([]);
+
+  useEffect(() => {
+    if (!mapNodeRef.current || mapRef.current) return;
+    mapRef.current = L.map(mapNodeRef.current, {
+      zoomControl: true,
+      scrollWheelZoom: true,
+      tap: true
+    }).setView([35.68, 139.76], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(mapRef.current);
+
+    return () => {
+      mapRef.current?.remove();
+      mapRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current = [];
+
+    const bounds = [];
+    visiblePlaces.forEach(place => {
+      const markerPosition = getMarkerLatLng(place, visiblePlaces);
+      const marker = L.marker(markerPosition, {
+        icon: L.divIcon({
+          className: `tripMarker ${place.id === selectedId ? 'selectedTripMarker' : ''}`,
+          html: `<span>${iconForPlace(place)}</span>`,
+          iconSize: [42, 42],
+          iconAnchor: [21, 21]
+        }),
+        title: place.name
+      }).addTo(map);
+      marker.on('click', () => onSelect(place.id));
+      marker.bindTooltip(place.name, { direction: 'top', offset: [0, -18] });
+      markersRef.current.push(marker);
+      bounds.push(markerPosition);
+    });
+
+    if (bounds.length === 1) {
+      map.setView(bounds[0], 14);
+    } else if (bounds.length > 1) {
+      map.fitBounds(bounds, { padding: [36, 36], maxZoom: 13 });
+    }
+  }, [visiblePlaces, selectedId, onSelect]);
+
+  return <div ref={mapNodeRef} className="map liveMap" aria-label="מפה אינטראקטיבית עם נקודות" />;
 }
 
 function App(){
@@ -310,21 +352,7 @@ function App(){
         </div>
 
         <div className="mapWrap">
-          <iframe className="map" title={`מפה: ${selected.name}`} src={osmEmbed(selected)} loading="lazy"></iframe>
-          <div className="pinLayer" aria-label="נקודות לחיצות על המפה">
-            {filtered.map((place, index) => (
-              <button
-                key={place.id}
-                className={`pin ${place.id === selected.id ? 'activePin' : ''}`}
-                style={getSpreadMapPosition(place, filtered)}
-                onClick={() => setSelectedId(place.id)}
-                title={place.name}
-                aria-label={`פתיחת ${place.name}`}
-              >
-                <span>{iconForPlace(place)}</span>
-              </button>
-            ))}
-          </div>
+          <TripMap places={filtered} selectedId={selected.id} onSelect={setSelectedId} />
         </div>
         <div className="mapLegend" aria-label="מקרא אייקונים">
           <span>⛩️ מקדש</span>
