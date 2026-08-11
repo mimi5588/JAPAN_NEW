@@ -27,7 +27,7 @@ h1{font-family:"Noto Serif Hebrew","Noto Sans Hebrew",serif;font-size:clamp(36px
 .primaryAction,.secondaryAction{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:900;border-radius:999px;padding:14px 22px}
 .primaryAction{background:var(--pink);color:#fff;box-shadow:0 12px 28px #0000002b}
 .secondaryAction{background:#fff;color:var(--indigo)}
-.heroCard,.notice,.selectedCard,.day,.extras article,.transfers article{background:#fffffff2;border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 60px #00206012}
+.heroCard,.notice,.selectedCard,.day,.extras article,.transfers article,.hotels article{background:#fffffff2;border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 60px #00206012}
 .heroCard{position:relative;padding:28px;display:flex;flex-direction:column;justify-content:center;gap:18px;font-weight:800;color:var(--indigo)}
 .heroCard strong{font-size:24px;color:var(--red)}
 .heroCard span,.facts span{display:flex;align-items:center;gap:8px}
@@ -61,7 +61,7 @@ button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:1
 button span{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
 button.active{background:var(--indigo);color:white;border-color:var(--indigo)}
 button.active span{color:#f6cf8e}
-.extras,.transfers{margin-top:28px}
+.extras,.transfers,.hotels{margin-top:28px}
 .extraGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .extras article{padding:22px}
 .extras p{color:var(--pink);font-weight:900;margin:0}
@@ -74,10 +74,20 @@ button.active span{color:#f6cf8e}
 .transfers p{margin:0;color:var(--muted);line-height:1.55}
 .transfers b{color:var(--red)}
 .transfers small{color:var(--muted);line-height:1.55}
+.hotelGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.hotels article{padding:22px;border-top:6px solid var(--pink)}
+.hotelDates{display:inline-flex;margin:0 0 8px;background:#fff0f8;color:var(--pink);font-weight:900;border-radius:999px;padding:7px 12px}
+.hotels h3{font-size:24px;margin:4px 0 8px;color:var(--indigo)}
+.hotelArea{display:block;color:var(--muted);font-weight:800;margin-bottom:12px}
+.hotelPick{background:#f6f8ff;border:1px solid #e5ebff;color:var(--indigo);font-weight:900;border-radius:18px;padding:12px;margin:10px 0}
+.hotels p{color:var(--muted);line-height:1.65}
+.hotelLinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.hotels a{display:inline-flex;gap:6px;align-items:center;color:var(--indigo);font-weight:900;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 14px}
+.hotels a:first-child{background:var(--indigo);color:#fff;border-color:var(--indigo)}
 footer{margin:28px 0 8px;color:var(--muted);text-align:center}
 @media(max-width:980px){
   main{padding:16px}
-  .hero,.layout,.extraGrid,.transferGrid{grid-template-columns:1fr}
+  .hero,.layout,.extraGrid,.transferGrid,.hotelGrid{grid-template-columns:1fr}
   .hero{padding:24px;border-radius:28px}
   .topbar{bottom:10px;top:auto;position:sticky;overflow:auto;justify-content:flex-start;width:100%;order:99}
   .itinerary{position:static;max-height:none}
@@ -88,5 +98,5 @@ footer{margin:28px 0 8px;color:var(--muted);text-align:center}
   .selectedCard h3{font-size:22px}
   h1{font-size:38px}
   .lead{font-size:17px}
-  .day,.selectedCard,.extras article,.transfers article{border-radius:22px}
+  .day,.selectedCard,.extras article,.transfers article,.hotels article{border-radius:22px}
 }

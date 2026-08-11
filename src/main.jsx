@@ -96,6 +96,45 @@ const transfers = [
   { from:'טוקיו', to:'נריטה', route:'Narita Express / Keisei Skyliner', time:'כ־40–75 דקות', note:'לבדוק טרמינל ולצאת מהעיר סביב 15:30–16:00 ביום החזרה.' }
 ];
 
+const hotels = [
+  {
+    dates:'5–9.5',
+    city:'טוקיו · 4 לילות',
+    area:'Shinjuku',
+    pick:'The Knot Tokyo Shinjuku',
+    link:'https://hotel-the-knot.jp/tokyoshinjuku/',
+    why:'הבחירה הכי מאוזנת: מודרני, נעים ובדרך כלל במחירים יחסית טובים לטוקיו. בסיס מעולה לשיבויה, הרג׳וקו, מרכז טוקיו ויציאה לטיול יום לפוג׳י/האקונה.',
+    alternatives:['Shinjuku Prince Hotel — מיקום מרכזי מאוד באזור הפעיל של שינג׳וקו', 'Shinjuku Washington Hotel — לרוב זול יותר ועדיין באזור טוב', 'All Day Place Shibuya / Shibuya Excel Hotel Tokyu — אם מעדיפים ממש שיבויה']
+  },
+  {
+    dates:'9–12.5',
+    city:'קיוטו · 3 לילות',
+    area:'Gion או Kyoto Station',
+    pick:'Granbell Hotel Kyoto',
+    link:'https://www.granbellhotel.jp/kyoto/',
+    why:'הבחירה החווייתית יותר: אזור גיון, נעים לערבים, קרוב לשיטוטים בגיון ופונטוצ׳ו. אם נוחות תחבורה חשובה יותר — Miyako City Kintetsu Kyoto Station עדיף.',
+    alternatives:['Miyako City Kintetsu Kyoto Station — הכי נוח לתחבורה ולמזוודות', 'Hotel Granvia Kyoto — ממש בתוך/צמוד לתחנת קיוטו', 'Rinn Kyoto Station — קטן יותר, דירוג גבוה ומחיר נוח יחסית', 'The Celestine Hotel Gion — אם התקציב מאפשר ורוצים פינוק']
+  },
+  {
+    dates:'12–15.5',
+    city:'אוסקה · 3 לילות',
+    area:'Namba / Dotonbori',
+    pick:'Vessel Inn Namba',
+    link:'https://www.vessel-hotel.jp/inn/namba/',
+    why:'האזור הכי נכון לאוסקה בערב. חוזרים מיום ארוך ונמצאים ישר ליד דוטונבורי, אוכל, קניות ותחנת נאמבה.',
+    alternatives:['Namba Oriental Hotel — מיקום מעולה באזור Sennichimae/Namba', 'Il Cuore Hotel Namba — אופציה זולה וקרובה לתחנת Namba', 'Onyado Nono Nanba — יותר חוויה יפנית ומפנקת']
+  },
+  {
+    dates:'15–16.5',
+    city:'טוקיו · לילה אחרון',
+    area:'Shibuya או Tokyo Station/Ueno',
+    pick:'All Day Place Shibuya',
+    link:'https://www.uds-hotels.com/all-day-place/shibuya/',
+    why:'לילה אחרון כיפי בטוקיו עם קניות ואווירה. אם רוצים נוחות מקסימלית לנריטה, לשקול Tokyo Station או Ueno במקום שיבויה.',
+    alternatives:['Shibuya Stream Hotel — מיקום נהדר ודירוג גבוה, יקר יותר', 'Tokyo Station/Ueno — עדיף אם המיקוד הוא יציאה נוחה לנריטה']
+  }
+];
+
 function googleMapsUrl(place){ return `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`; }
 function osmEmbed(place){ return `https://www.openstreetmap.org/export/embed.html?bbox=${place.lng-0.018}%2C${place.lat-0.012}%2C${place.lng+0.018}%2C${place.lat+0.012}&layer=mapnik&marker=${place.lat}%2C${place.lng}`; }
 
@@ -120,6 +159,7 @@ function App(){
     <nav className="topbar" aria-label="ניווט מהיר">
       <a href="#map">מפה</a>
       <a href="#route">מסלול</a>
+      <a href="#hotels">מלונות</a>
       <a href="#transfers">הגעה</a>
       <a href="#shopping">קניות</a>
     </nav>
@@ -206,6 +246,24 @@ function App(){
       <h2>תוספות חכמות ליד המקומות שביקשת</h2>
       <div className="extraGrid">
         {extras.map(e => <article key={e.title}><p>{e.city}</p><h3>{e.title}</h3><span>{e.text}</span></article>)}
+      </div>
+    </section>
+
+    <section className="hotels" id="hotels">
+      <h2>מלונות מומלצים לפי לילות</h2>
+      <div className="hotelGrid">
+        {hotels.map(hotel => <article key={hotel.dates}>
+          <p className="hotelDates">{hotel.dates}</p>
+          <h3>{hotel.city}</h3>
+          <span className="hotelArea">אזור מומלץ: {hotel.area}</span>
+          <div className="hotelPick">הבחירה שלי: {hotel.pick}</div>
+          <p>{hotel.why}</p>
+          <ul>{hotel.alternatives.map(a => <li key={a}>{a}</li>)}</ul>
+          <div className="hotelLinks">
+            <a href={hotel.link} target="_blank" rel="noreferrer">קישור למלון <ExternalLink size={14}/></a>
+            <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotel.pick)}`} target="_blank" rel="noreferrer">לפתוח במפות <ExternalLink size={14}/></a>
+          </div>
+        </article>)}
       </div>
     </section>
 
