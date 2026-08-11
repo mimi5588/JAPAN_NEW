@@ -127,7 +127,7 @@ function App(){
     <section className="hero">
       <div>
         <p className="eyebrow">קוניצ׳יווה, יפן מחכה לכן</p>
-        <h1>מסלול יפן אינטראקטיבי עם מפה, מחירים והזמנות מראש</h1>
+        <h1>הטיול הגדול ביפן - התחלנו</h1>
         <p className="lead">טוקיו, האקונה, קיוטו, נארה ואוסקה — עם כל המקומות שביקשת, כולל שכונות ומקומות קרובים ששווה להוסיף כשכבר נמצאים באזור.</p>
         <div className="heroActions">
           <a className="primaryAction" href="#map">לפתוח את המפה</a>
