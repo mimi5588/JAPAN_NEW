@@ -208,6 +208,28 @@ function getMapPosition(place, visiblePlaces) {
   return { left: `${x}%`, top: `${y}%` };
 }
 
+function getSpreadMapPosition(place, visiblePlaces) {
+  const base = getMapPosition(place, visiblePlaces);
+  const baseX = Number.parseFloat(base.left);
+  const baseY = Number.parseFloat(base.top);
+  const closePlaces = visiblePlaces.filter(other => {
+    const otherBase = getMapPosition(other, visiblePlaces);
+    const otherX = Number.parseFloat(otherBase.left);
+    const otherY = Number.parseFloat(otherBase.top);
+    return Math.hypot(baseX - otherX, baseY - otherY) < 9;
+  });
+
+  if (closePlaces.length < 2) return base;
+
+  const sorted = [...closePlaces].sort((a, b) => a.id.localeCompare(b.id));
+  const groupIndex = sorted.findIndex(item => item.id === place.id);
+  const angle = (Math.PI * 2 * groupIndex) / closePlaces.length;
+  const radius = Math.min(14, 7 + closePlaces.length * 1.25);
+  const x = Math.max(7, Math.min(93, baseX + Math.cos(angle) * radius));
+  const y = Math.max(9, Math.min(91, baseY + Math.sin(angle) * radius));
+  return { left: `${x}%`, top: `${y}%` };
+}
+
 function iconForPlace(place) {
   const text = `${place.id} ${place.name} ${place.note}`.toLowerCase();
   if (text.includes('מקדש') || text.includes('shrine') || text.includes('ji') || text.includes('inari') || text.includes('dera')) return '⛩️';
@@ -294,7 +316,7 @@ function App(){
               <button
                 key={place.id}
                 className={`pin ${place.id === selected.id ? 'activePin' : ''}`}
-                style={getMapPosition(place, filtered)}
+                style={getSpreadMapPosition(place, filtered)}
                 onClick={() => setSelectedId(place.id)}
                 title={place.name}
                 aria-label={`פתיחת ${place.name}`}
