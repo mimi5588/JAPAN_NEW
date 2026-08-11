@@ -43,6 +43,12 @@ h2{font-size:28px;margin:6px 0 16px}
 .dayTop{display:flex;justify-content:space-between;color:var(--pink);font-weight:900}
 .day h3{font-size:22px;margin:10px 0 4px}
 .day p{color:var(--muted);margin:0 0 10px}
+.daySummary{background:#f8fbff;border:1px solid #e5ebff;border-radius:18px;padding:12px;color:var(--indigo)!important;font-weight:800;line-height:1.55}
+.daySchedule{display:grid;gap:10px;margin:12px 0}
+.scheduleItem{display:grid;grid-template-columns:76px 1fr;gap:4px 10px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px 12px}
+.scheduleItem strong{grid-row:span 2;color:var(--pink);font-weight:900;direction:ltr;text-align:left}
+.scheduleItem span{font-weight:900;color:var(--indigo)}
+.scheduleItem small{color:var(--muted);line-height:1.45}
 ul{margin:0;padding:0 20px 0 0;line-height:1.65}
 .mapPanel{background:#fff;border:1px solid var(--line);border-radius:32px;padding:18px;box-shadow:0 24px 80px #00206016}
 .toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center}
@@ -112,6 +118,7 @@ footer{margin:28px 0 8px;color:var(--muted);text-align:center}
   .dayPicker{display:flex;position:sticky;top:0;z-index:10;background:#f7f9fcf2;border-radius:18px;padding:10px;box-shadow:0 12px 30px #00206012}
   .itinerary .day{display:none}
   .itinerary .day.visibleDay{display:block}
+  .scheduleItem{grid-template-columns:68px 1fr}
   .places{grid-template-columns:1fr}
   .heroCard{padding:20px}
   .map{height:360px}
