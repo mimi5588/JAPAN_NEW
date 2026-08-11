@@ -195,6 +195,7 @@ const nearbyGuide = [
 ];
 
 function googleMapsUrl(place){ return `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`; }
+function googleMapsSearchUrl(query){ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`; }
 function osmEmbed(place){ return `https://www.openstreetmap.org/export/embed.html?bbox=${place.lng-0.018}%2C${place.lat-0.012}%2C${place.lng+0.018}%2C${place.lat+0.012}&layer=mapnik&marker=${place.lat}%2C${place.lng}`; }
 
 function getMapPosition(place, visiblePlaces) {
@@ -225,6 +226,7 @@ function iconForPlace(place) {
 function App(){
   const [selectedId, setSelectedId] = useState('shibuyasky');
   const [filter, setFilter] = useState('הכל');
+  const [selectedDay, setSelectedDay] = useState(1);
   const selected = places.find(p => p.id === selectedId) ?? places[0];
   const filtered = useMemo(() => filter === 'הכל' ? places : places.filter(p => p.city === filter), [filter]);
   const cities = ['הכל', ...Array.from(new Set(places.map(p => p.city)))];
@@ -264,7 +266,12 @@ function App(){
     <section className="layout">
       <aside className="itinerary" id="route">
         <h2>המסלול לפי ימים</h2>
-        {itinerary.map(day => <article className="day" key={day.day}>
+        <div className="dayPicker" aria-label="בחירת יום במסלול">
+          {itinerary.map(day => <button key={day.day} onClick={() => setSelectedDay(day.day)} className={selectedDay === day.day ? 'selectedDay' : ''}>
+            יום {day.day}
+          </button>)}
+        </div>
+        {itinerary.map(day => <article className={`day ${selectedDay === day.day ? 'visibleDay' : ''}`} key={day.day}>
           <div className="dayTop"><span>יום {day.day}</span><strong>{day.date}</strong></div>
           <h3>{day.city}</h3>
           <p>{day.area} · {day.stay}</p>
@@ -359,10 +366,10 @@ function App(){
           <p className="areaTag">{area.bestFor}</p>
           <h3>{area.area}</h3>
           <div className="nearbyColumns">
-            <div><b>מסעדות</b>{area.restaurants.map(item => <span key={item}>{item}</span>)}</div>
-            <div><b>סושי מסוע</b>{area.sushi.map(item => <span key={item}>{item}</span>)}</div>
-            <div><b>סטארבקס / קפה</b>{area.coffee.map(item => <span key={item}>{item}</span>)}</div>
-            <div><b>מרכולים וחנויות</b>{area.markets.map(item => <span key={item}>{item}</span>)}</div>
+            <div><b>מסעדות</b>{area.restaurants.map(item => <a key={item} href={googleMapsSearchUrl(`${item} ${area.area} Japan`)} target="_blank" rel="noreferrer">{item} <ExternalLink size={12}/></a>)}</div>
+            <div><b>סושי מסוע</b>{area.sushi.map(item => <a key={item} href={googleMapsSearchUrl(`${item} ${area.area} Japan`)} target="_blank" rel="noreferrer">{item} <ExternalLink size={12}/></a>)}</div>
+            <div><b>סטארבקס / קפה</b>{area.coffee.map(item => <a key={item} href={googleMapsSearchUrl(`${item} ${area.area} Japan`)} target="_blank" rel="noreferrer">{item} <ExternalLink size={12}/></a>)}</div>
+            <div><b>מרכולים וחנויות</b>{area.markets.map(item => <a key={item} href={googleMapsSearchUrl(`${item} ${area.area} Japan`)} target="_blank" rel="noreferrer">{item} <ExternalLink size={12}/></a>)}</div>
           </div>
         </article>)}
       </div>
