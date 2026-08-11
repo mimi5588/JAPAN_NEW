@@ -16,7 +16,7 @@ main{max-width:1440px;margin:auto;padding:28px}
 .eyebrow{letter-spacing:.08em;color:var(--red);font-weight:800;margin:0 0 12px}
 h1{font-size:clamp(34px,5vw,72px);line-height:.98;margin:0;max-width:900px}
 .lead{font-size:20px;color:var(--muted);max-width:760px;line-height:1.65}
-.heroCard,.notice,.selectedCard,.day,.extras article{background:rgba(255,250,245,.86);border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 60px rgba(66,44,28,.08)}
+.heroCard,.notice,.selectedCard,.day,.extras article,.transfers article{background:rgba(255,250,245,.86);border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 60px rgba(66,44,28,.08)}
 .heroCard{padding:28px;display:flex;flex-direction:column;justify-content:center;gap:18px;font-weight:800}
 .heroCard span,.facts span{display:flex;align-items:center;gap:8px}
 .notice{padding:18px 22px;margin-bottom:22px;color:#513b31}
@@ -31,7 +31,12 @@ ul{margin:0;padding:0 20px 0 0;line-height:1.65}
 .mapPanel{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.7);border-radius:32px;padding:18px;backdrop-filter:blur(8px)}
 .toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center}
 select{border:1px solid var(--line);border-radius:999px;padding:10px 16px;background:#fff;color:var(--ink);font-weight:700}
-.map{width:100%;height:420px;border:0;border-radius:24px;background:#ddd}
+.mapWrap{position:relative;border-radius:24px;overflow:hidden;background:#ddd}
+.map{width:100%;height:420px;border:0;background:#ddd;display:block}
+.pinLayer{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:999px;border:3px solid #fff;background:var(--red);color:#fff;display:grid;place-items:center;padding:0;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.28);font-size:13px;pointer-events:auto;z-index:2}
+.pin span{display:block;color:#fff;margin:0;font-size:12px;line-height:1}
+.pin:hover,.activePin{background:var(--indigo);scale:1.12;z-index:3}
 .selectedCard{margin-top:14px;padding:20px}
 .selectedCard .city{color:var(--red);font-weight:900;margin:0}
 .selectedCard h3{font-size:26px;margin:6px 0 12px}
@@ -39,20 +44,34 @@ select{border:1px solid var(--line);border-radius:999px;padding:10px 16px;backgr
 .facts span{background:#f4e9df;border-radius:999px;padding:8px 12px;color:#4f433f;font-size:14px}
 .selectedCard a{display:inline-flex;gap:6px;align-items:center;color:var(--indigo);font-weight:900;text-decoration:none}
 .places{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px;max-height:520px;overflow:auto;padding-left:6px}
-button{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:12px;text-align:right;cursor:pointer;color:var(--ink);font-weight:800}
+button{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:12px;text-align:right;cursor:pointer;color:var(--ink);font-weight:800;touch-action:manipulation}
 button span{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
 button.active{background:var(--indigo);color:white;border-color:var(--indigo)}
 button.active span{color:#f6cf8e}
-.extras{margin-top:28px}
+.extras,.transfers{margin-top:28px}
 .extraGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .extras article{padding:22px}
 .extras p{color:var(--red);font-weight:900;margin:0}
 .extras h3{margin:8px 0}
 .extras span{line-height:1.7;color:var(--muted)}
+.transferGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.transfers article{padding:18px;display:flex;flex-direction:column;gap:10px}
+.routeTitle{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--indigo);font-size:18px}
+.routeTitle span{color:var(--red);font-weight:900}
+.transfers p{margin:0;color:var(--muted);line-height:1.55}
+.transfers b{color:var(--red)}
+.transfers small{color:var(--muted);line-height:1.55}
 footer{margin:28px 0 8px;color:var(--muted);text-align:center}
 @media(max-width:980px){
   main{padding:16px}
-  .hero,.layout,.extraGrid{grid-template-columns:1fr}
+  .hero,.layout,.extraGrid,.transferGrid{grid-template-columns:1fr}
   .itinerary{position:static;max-height:none}
   .places{grid-template-columns:1fr}
+  .heroCard{padding:20px}
+  .map{height:360px}
+  .pin{width:38px;height:38px}
+  .selectedCard h3{font-size:22px}
+  h1{font-size:38px}
+  .lead{font-size:17px}
+  .day,.selectedCard,.extras article,.transfers article{border-radius:22px}
 }
