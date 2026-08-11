@@ -207,6 +207,21 @@ function getMapPosition(place, visiblePlaces) {
   return { left: `${x}%`, top: `${y}%` };
 }
 
+function iconForPlace(place) {
+  const text = `${place.id} ${place.name} ${place.note}`.toLowerCase();
+  if (text.includes('מקדש') || text.includes('shrine') || text.includes('ji') || text.includes('inari') || text.includes('dera')) return '⛩️';
+  if (text.includes('טירה') || text.includes('castle')) return '🏯';
+  if (text.includes('מוזיאון') || text.includes('teamlab') || text.includes('גיבלי')) return '🎨';
+  if (text.includes('אקווריום')) return '🐠';
+  if (text.includes('שוק') || text.includes('קניות') || text.includes('don') || text.includes('דון') || text.includes('parco') || text.includes('station') || text.includes('ginza') || text.includes('namba')) return '🛒';
+  if (text.includes('קפה') || text.includes('פוקימון') || text.includes('מסעד')) return '🍽️';
+  if (text.includes('מגדל') || text.includes('sky') || text.includes('skytree') || text.includes('תצפית')) return '🗼';
+  if (text.includes('יער') || text.includes('פארק') || text.includes('אגם') || text.includes('נהר') || text.includes('hakone')) return '🌿';
+  if (text.includes('גני') || text.includes('גן')) return '🌸';
+  if (text.includes('מעבר') || text.includes('רובע') || text.includes('אודייבה') || text.includes('דוטונבורי')) return '📍';
+  return '⭐';
+}
+
 function App(){
   const [selectedId, setSelectedId] = useState('shibuyasky');
   const [filter, setFilter] = useState('הכל');
@@ -277,10 +292,20 @@ function App(){
                 title={place.name}
                 aria-label={`פתיחת ${place.name}`}
               >
-                <span>{index + 1}</span>
+                <span>{iconForPlace(place)}</span>
               </button>
             ))}
           </div>
+        </div>
+        <div className="mapLegend" aria-label="מקרא אייקונים">
+          <span>⛩️ מקדש</span>
+          <span>🏯 טירה</span>
+          <span>🗼 תצפית</span>
+          <span>🛒 קניות/סופר</span>
+          <span>🍽️ אוכל/קפה</span>
+          <span>🎨 מוזיאון</span>
+          <span>🌿 טבע</span>
+          <span>🐠 אקווריום</span>
         </div>
 
         <div className="selectedCard">

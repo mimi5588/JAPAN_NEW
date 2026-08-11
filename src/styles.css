@@ -47,9 +47,11 @@ select{border:1px solid var(--line);border-radius:999px;padding:12px 18px;backgr
 .mapWrap{position:relative;border-radius:26px;overflow:hidden;background:#dde7f5;border:1px solid var(--line)}
 .map{width:100%;height:420px;border:0;background:#ddd;display:block}
 .pinLayer{position:absolute;inset:0;pointer-events:none}
-.pin{position:absolute;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:999px;border:3px solid #fff;background:var(--pink);color:#fff;display:grid;place-items:center;padding:0;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.28);font-size:13px;pointer-events:auto;z-index:2}
-.pin span{display:block;color:#fff;margin:0;font-size:12px;line-height:1}
+.pin{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:999px;border:3px solid #fff;background:#fff;color:var(--indigo);display:grid;place-items:center;padding:0;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.28);font-size:18px;pointer-events:auto;z-index:2}
+.pin span{display:block;margin:0;font-size:18px;line-height:1;filter:drop-shadow(0 1px 0 #fff)}
 .pin:hover,.activePin{background:var(--red);scale:1.16;z-index:3}
+.mapLegend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.mapLegend span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 11px;color:var(--indigo);font-size:13px;font-weight:900;box-shadow:0 8px 24px #0020600d}
 .selectedCard{margin-top:14px;padding:20px}
 .selectedCard .city{color:var(--pink);font-weight:900;margin:0}
 .selectedCard h3{font-size:26px;margin:6px 0 12px}
