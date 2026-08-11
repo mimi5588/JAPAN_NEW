@@ -274,7 +274,7 @@ function App(){
 
       <section className="mapPanel" id="map">
         <div className="toolbar">
-          <h2>מפת המקומות</h2>
+          <h2>מפה</h2>
           <select value={filter} onChange={e=>setFilter(e.target.value)} aria-label="סינון עיר">
             {cities.map(c => <option key={c} value={c}>{c === 'הכל' ? c : cityNames[c]}</option>)}
           </select>
