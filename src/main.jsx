@@ -117,13 +117,25 @@ function App(){
   const cities = ['הכל', ...Array.from(new Set(places.map(p => p.city)))];
 
   return <main>
+    <nav className="topbar" aria-label="ניווט מהיר">
+      <a href="#map">מפה</a>
+      <a href="#route">מסלול</a>
+      <a href="#transfers">הגעה</a>
+      <a href="#shopping">קניות</a>
+    </nav>
+
     <section className="hero">
       <div>
-        <p className="eyebrow">יפן · 4.5–16.5 · 12 ימים</p>
+        <p className="eyebrow">קוניצ׳יווה, יפן מחכה לכן</p>
         <h1>מסלול יפן אינטראקטיבי עם מפה, מחירים והזמנות מראש</h1>
         <p className="lead">טוקיו, האקונה, קיוטו, נארה ואוסקה — עם כל המקומות שביקשת, כולל שכונות ומקומות קרובים ששווה להוסיף כשכבר נמצאים באזור.</p>
+        <div className="heroActions">
+          <a className="primaryAction" href="#map">לפתוח את המפה</a>
+          <a className="secondaryAction" href="#route">לראות את הימים</a>
+        </div>
       </div>
       <div className="heroCard">
+        <strong>4.5–16.5 · 12 ימים</strong>
         <span><CalendarDays size={18}/> 5 לילות טוקיו</span>
         <span><Train size={18}/> 4 לילות קיוטו</span>
         <span><MapPin size={18}/> אוסקה קצרה + חלופות</span>
@@ -135,7 +147,7 @@ function App(){
     </section>
 
     <section className="layout">
-      <aside className="itinerary">
+      <aside className="itinerary" id="route">
         <h2>המסלול לפי ימים</h2>
         {itinerary.map(day => <article className="day" key={day.day}>
           <div className="dayTop"><span>יום {day.day}</span><strong>{day.date}</strong></div>
@@ -145,7 +157,7 @@ function App(){
         </article>)}
       </aside>
 
-      <section className="mapPanel">
+      <section className="mapPanel" id="map">
         <div className="toolbar">
           <h2>מפת המקומות</h2>
           <select value={filter} onChange={e=>setFilter(e.target.value)} aria-label="סינון עיר">
@@ -190,14 +202,14 @@ function App(){
       </section>
     </section>
 
-    <section className="extras">
+    <section className="extras" id="shopping">
       <h2>תוספות חכמות ליד המקומות שביקשת</h2>
       <div className="extraGrid">
         {extras.map(e => <article key={e.title}><p>{e.city}</p><h3>{e.title}</h3><span>{e.text}</span></article>)}
       </div>
     </section>
 
-    <section className="transfers">
+    <section className="transfers" id="transfers">
       <h2>דרכי הגעה וזמני נסיעה בין האזורים</h2>
       <div className="transferGrid">
         {transfers.map((t, i) => <article key={i}>
