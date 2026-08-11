@@ -135,6 +135,65 @@ const hotels = [
   }
 ];
 
+const nearbyGuide = [
+  {
+    area:'שינג׳וקו',
+    bestFor:'לילות ראשונים, אוכל וקניות עד מאוחר',
+    restaurants:['Omoide Yokocho — יקיטורי ואווירת סמטאות', 'Ichiran Ramen Shinjuku — ראמן מוכר ונוח', 'Gyukatsu Motomura — גיוקאטסו פופולרי'],
+    sushi:['Kura Sushi Shinjuku', 'Sushiro Shinjuku', 'Uobei / סושי מהיר בסגנון הזמנה במסך'],
+    coffee:['Starbucks Shinjuku Southern Terrace', 'Blue Bottle Shinjuku', 'Tully’s Coffee ליד התחנות'],
+    markets:['7‑Eleven / FamilyMart / Lawson כמעט בכל רחוב', 'Don Quijote Shinjuku Kabukicho', 'Lumine / NEWoMan / Takashimaya Times Square']
+  },
+  {
+    area:'שיבויה והרג׳וקו',
+    bestFor:'שיבויה סקיי, קניות, דון קיחוטה וערב צעיר',
+    restaurants:['Uobei Shibuya Dogenzaka — סושי מסוע/מסך מעולה לקבוצה', 'Ichiran Shibuya', 'Gyukatsu Motomura Shibuya'],
+    sushi:['Uobei Shibuya Dogenzaka', 'Sushiro Shibuya', 'Kura Sushi באזור שיבויה/הרג׳וקו'],
+    coffee:['Starbucks Shibuya Tsutaya / אזור מעבר החצייה', 'Streamer Coffee Company', 'Blue Bottle Shibuya'],
+    markets:['MEGA Don Quijote Shibuya', 'Shibuya 109', 'Shibuya PARCO', 'Nintendo Tokyo / Pokémon Center Shibuya']
+  },
+  {
+    area:'אסאקוסה וסקייטרי',
+    bestFor:'מקדשים, אוכל רחוב ומתנות',
+    restaurants:['רחוב Nakamise — חטיפים ומתוקים יפניים', 'Asakusa Gyukatsu', 'Tempura / Soba מסביב לסנסו־ג׳י'],
+    sushi:['Kura Sushi Asakusa ROX', 'Sushiro / סניפים באזור Ueno-Asakusa', 'מסעדות סושי קטנות ליד התחנה'],
+    coffee:['Starbucks Asakusa Kaminarimon', 'קפה סביב Sumida Park', 'קפה בתוך Tokyo Solamachi'],
+    markets:['Tokyo Solamachi — קניון ענק ליד Skytree', 'Don Quijote Asakusa', 'חנויות מזכרות ב־Nakamise-dori']
+  },
+  {
+    area:'גינזה / תחנת טוקיו / ניהונבאשי',
+    bestFor:'פוקימון קפה, קניות יפות ואוכל מסודר',
+    restaurants:['Tokyo Station Ramen Street', 'Depachika — קומות אוכל בכלבו', 'מסעדות סביב Nihonbashi Takashimaya'],
+    sushi:['Sushiro Yurakucho/Ginza area', 'Kura Sushi Ginza area', 'סושי בעמידה באזור Yurakucho'],
+    coffee:['Starbucks Reserve / Ginza area', 'Blue Bottle Ginza', 'קפה בתחנת טוקיו'],
+    markets:['Ginza Six', 'Itoya Ginza', 'Nihonbashi Takashimaya', 'Tokyo Character Street']
+  },
+  {
+    area:'קיוטו — גיון / קוואראמאצ׳י / שוק נישיקי',
+    bestFor:'ערבים יפים, אוכל ושופינג נעים',
+    restaurants:['Pontocho Alley — מסעדות ערב לאורך הסמטה', 'Nishiki Market — טעימות ואוכל רחוב', 'Gion area — סובה/אודון/קינוחים'],
+    sushi:['Kura Sushi Kyoto', 'Sushiro Kyoto Kawaramachi', 'Musashi Sushi Kyoto Station אם אתן ליד התחנה'],
+    coffee:['Starbucks Kyoto Ninenzaka Yasaka Chaya — סניף יפה בבית מסורתי', 'Arabica Kyoto Higashiyama', 'Blue Bottle Kyoto'],
+    markets:['Nishiki Market', 'Kawaramachi OPA / Mina Kyoto', 'Kyoto Station Porta / Isetan', 'חנויות מזכרות בגיון וסאננזקה']
+  },
+  {
+    area:'אוסקה — נאמבה / דוטונבורי',
+    bestFor:'אוכל רחוב, קניות ודון קיחוטה',
+    restaurants:['Dotonbori — טאקויאקי, אוקונומיאקי וקושיקאצו', 'Hozenji Yokocho — סמטה יפה לאוכל', 'Ichiran Dotonbori'],
+    sushi:['Kura Sushi Dotonbori', 'Sushiro Namba', 'Daiki Suisan / סושי מסוע פופולרי'],
+    coffee:['Starbucks Tsutaya Ebisu-bashi / Dotonbori', 'Streamer Coffee Namba', 'בתי קפה ב־Namba Parks'],
+    markets:['Don Quijote Dotonbori', 'Kuromon Market', 'Shinsaibashi-suji Shopping Street', 'Namba Parks / Takashimaya Osaka']
+  },
+  {
+    area:'האקונה',
+    bestFor:'יום טבע, מוזיאון פתוח ואגם אשי',
+    restaurants:['מסעדות סביב Hakone-Yumoto Station', 'בתי תה ומסעדות ליד אגם אשי', 'קפה/מסעדה במוזיאון הפתוח'],
+    sushi:['לא אזור קלאסי לסושי מסוע — עדיף לאכול פשוט סביב התחנות', 'אם רוצים סושי, להשאיר לטוקיו/אוסקה'],
+    coffee:['Starbucks / רשתות באזור Odawara בדרך', 'בתי קפה מקומיים סביב Hakone-Yumoto', 'קפה ליד המוזיאון הפתוח'],
+    markets:['7‑Eleven / Lawson סביב תחנות מרכזיות', 'חנויות מזכרות ב־Hakone-Yumoto', 'חנויות מקומיות ליד אגם אשי']
+  }
+];
+
 function googleMapsUrl(place){ return `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`; }
 function osmEmbed(place){ return `https://www.openstreetmap.org/export/embed.html?bbox=${place.lng-0.018}%2C${place.lat-0.012}%2C${place.lng+0.018}%2C${place.lat+0.012}&layer=mapnik&marker=${place.lat}%2C${place.lng}`; }
 
@@ -161,6 +220,7 @@ function App(){
       <a href="#route">מסלול</a>
       <a href="#hotels">מלונות</a>
       <a href="#transfers">הגעה</a>
+      <a href="#nearby">בסביבה</a>
       <a href="#shopping">קניות</a>
     </nav>
 
@@ -262,6 +322,22 @@ function App(){
           <div className="hotelLinks">
             <a href={hotel.link} target="_blank" rel="noreferrer">קישור למלון <ExternalLink size={14}/></a>
             <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotel.pick)}`} target="_blank" rel="noreferrer">לפתוח במפות <ExternalLink size={14}/></a>
+          </div>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="nearby" id="nearby">
+      <h2>מה יש ליד: אוכל, קפה, סושי וקניות</h2>
+      <div className="nearbyGrid">
+        {nearbyGuide.map(area => <article key={area.area}>
+          <p className="areaTag">{area.bestFor}</p>
+          <h3>{area.area}</h3>
+          <div className="nearbyColumns">
+            <div><b>מסעדות</b>{area.restaurants.map(item => <span key={item}>{item}</span>)}</div>
+            <div><b>סושי מסוע</b>{area.sushi.map(item => <span key={item}>{item}</span>)}</div>
+            <div><b>סטארבקס / קפה</b>{area.coffee.map(item => <span key={item}>{item}</span>)}</div>
+            <div><b>מרכולים וחנויות</b>{area.markets.map(item => <span key={item}>{item}</span>)}</div>
           </div>
         </article>)}
       </div>
