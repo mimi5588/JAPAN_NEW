@@ -57,7 +57,8 @@ select{border:1px solid var(--line);border-radius:999px;padding:12px 18px;backgr
 .leaflet-tooltip{font-family:"Noto Sans Hebrew","Segoe UI",Arial,sans-serif!important;direction:rtl;border:0!important;border-radius:14px!important;background:var(--indigo)!important;color:#fff!important;box-shadow:0 10px 24px rgba(0,0,0,.24)!important;font-weight:800!important}
 .leaflet-control-zoom a{color:var(--indigo)!important;text-decoration:none!important}
 .mapLegend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.mapLegend span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 11px;color:var(--indigo);font-size:13px;font-weight:900;box-shadow:0 8px 24px #0020600d}
+.mapLegend button{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 11px;color:var(--indigo);font-size:13px;font-weight:900;box-shadow:0 8px 24px #0020600d;text-align:center}
+.mapLegend button.activeLegend{background:var(--indigo);color:#fff;border-color:var(--indigo)}
 .selectedCard{margin-top:14px;padding:20px}
 .selectedCard .city{color:var(--pink);font-weight:900;margin:0}
 .selectedCard h3{font-size:26px;margin:6px 0 12px}

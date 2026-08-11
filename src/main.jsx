@@ -213,6 +213,31 @@ function iconForPlace(place) {
   return '⭐';
 }
 
+const categories = [
+  { id:'all', label:'הכול', icon:'⭐' },
+  { id:'temple', label:'מקדשים', icon:'⛩️' },
+  { id:'castle', label:'טירות', icon:'🏯' },
+  { id:'tower', label:'תצפיות', icon:'🗼' },
+  { id:'shopping', label:'קניות/סופר', icon:'🛒' },
+  { id:'food', label:'אוכל/קפה', icon:'🍽️' },
+  { id:'museum', label:'מוזיאונים', icon:'🎨' },
+  { id:'nature', label:'טבע', icon:'🌿' },
+  { id:'aquarium', label:'אקווריום', icon:'🐠' }
+];
+
+function categoryForPlace(place) {
+  const text = `${place.id} ${place.name} ${place.note}`.toLowerCase();
+  if (text.includes('מקדש') || text.includes('shrine') || text.includes('ji') || text.includes('inari') || text.includes('dera')) return 'temple';
+  if (text.includes('טירה') || text.includes('castle')) return 'castle';
+  if (text.includes('מוזיאון') || text.includes('teamlab') || text.includes('גיבלי')) return 'museum';
+  if (text.includes('אקווריום')) return 'aquarium';
+  if (text.includes('שוק') || text.includes('קניות') || text.includes('don') || text.includes('דון') || text.includes('parco') || text.includes('station') || text.includes('ginza') || text.includes('namba')) return 'shopping';
+  if (text.includes('קפה') || text.includes('פוקימון') || text.includes('מסעד')) return 'food';
+  if (text.includes('מגדל') || text.includes('sky') || text.includes('skytree') || text.includes('תצפית')) return 'tower';
+  if (text.includes('יער') || text.includes('פארק') || text.includes('אגם') || text.includes('נהר') || text.includes('hakone') || text.includes('גן') || text.includes('גני')) return 'nature';
+  return 'other';
+}
+
 function getMarkerLatLng(place, visiblePlaces) {
   const closePlaces = visiblePlaces.filter(other => {
     const latDistance = Math.abs(other.lat - place.lat);
@@ -290,9 +315,16 @@ function TripMap({ places: visiblePlaces, selectedId, onSelect }) {
 function App(){
   const [selectedId, setSelectedId] = useState('shibuyasky');
   const [filter, setFilter] = useState('הכל');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [selectedDay, setSelectedDay] = useState(1);
   const selected = places.find(p => p.id === selectedId) ?? places[0];
-  const filtered = useMemo(() => filter === 'הכל' ? places : places.filter(p => p.city === filter), [filter]);
+  const filtered = useMemo(() => {
+    return places.filter(p => {
+      const cityMatch = filter === 'הכל' || p.city === filter;
+      const categoryMatch = categoryFilter === 'all' || categoryForPlace(p) === categoryFilter;
+      return cityMatch && categoryMatch;
+    });
+  }, [filter, categoryFilter]);
   const cities = ['הכל', ...Array.from(new Set(places.map(p => p.city)))];
 
   return <main>
@@ -355,14 +387,16 @@ function App(){
           <TripMap places={filtered} selectedId={selected.id} onSelect={setSelectedId} />
         </div>
         <div className="mapLegend" aria-label="מקרא אייקונים">
-          <span>⛩️ מקדש</span>
-          <span>🏯 טירה</span>
-          <span>🗼 תצפית</span>
-          <span>🛒 קניות/סופר</span>
-          <span>🍽️ אוכל/קפה</span>
-          <span>🎨 מוזיאון</span>
-          <span>🌿 טבע</span>
-          <span>🐠 אקווריום</span>
+          {categories.map(category => (
+            <button
+              key={category.id}
+              onClick={() => setCategoryFilter(category.id)}
+              className={categoryFilter === category.id ? 'activeLegend' : ''}
+              type="button"
+            >
+              {category.icon} {category.label}
+            </button>
+          ))}
         </div>
 
         <div className="selectedCard">
