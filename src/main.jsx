@@ -430,6 +430,89 @@ function TripMap({ places: visiblePlaces, selectedId, onSelect }) {
   return <div ref={mapNodeRef} className="map liveMap" aria-label="מפה אינטראקטיבית עם נקודות" />;
 }
 
+const currencyLabels = {
+  JPY: 'יין יפני ¥',
+  ILS: 'שקל ₪',
+  USD: 'דולר $',
+  EUR: 'יורו €'
+};
+
+const fallbackRates = {
+  JPY: 1,
+  USD: 0.0067,
+  EUR: 0.0061,
+  ILS: 0.024
+};
+
+function MoneyCalculator() {
+  const [amount, setAmount] = useState(1000);
+  const [quantity, setQuantity] = useState(1);
+  const [from, setFrom] = useState('JPY');
+  const [to, setTo] = useState('ILS');
+  const [rates, setRates] = useState(fallbackRates);
+  const [rateStatus, setRateStatus] = useState('שערי ברירת מחדל — אפשר להשתמש גם בלי אינטרנט');
+
+  useEffect(() => {
+    fetch('https://open.er-api.com/v6/latest/JPY')
+      .then(response => response.json())
+      .then(data => {
+        if (!data?.rates) return;
+        setRates({
+          JPY: 1,
+          USD: data.rates.USD ?? fallbackRates.USD,
+          EUR: data.rates.EUR ?? fallbackRates.EUR,
+          ILS: data.rates.ILS ?? fallbackRates.ILS
+        });
+        setRateStatus(`שערים עודכנו אונליין: ${new Date().toLocaleDateString('he-IL')}`);
+      })
+      .catch(() => setRateStatus('אין חיבור לשערים חיים — משתמשים בשערי ברירת מחדל'));
+  }, []);
+
+  const total = Number(amount || 0) * Number(quantity || 1);
+  const totalInJpy = from === 'JPY' ? total : total / rates[from];
+  const converted = to === 'JPY' ? totalInJpy : totalInJpy * rates[to];
+  const oneUnit = from === 'JPY' ? rates[to] : (1 / rates[from]) * rates[to];
+
+  return (
+    <section className="calculator" id="calculator">
+      <div className="sectionHeader">
+        <p className="areaTag">כסף בזמן אמת</p>
+        <h2>מחשבון המרת מטבע וכרטיסים</h2>
+      </div>
+      <div className="calculatorGrid">
+        <article className="calculatorCard">
+          <label>סכום</label>
+          <input type="number" min="0" value={amount} onChange={event => setAmount(event.target.value)} />
+          <label>כמות / מספר כרטיסים</label>
+          <input type="number" min="1" value={quantity} onChange={event => setQuantity(event.target.value)} />
+          <div className="currencyRow">
+            <div>
+              <label>ממטבע</label>
+              <select value={from} onChange={event => setFrom(event.target.value)}>
+                {Object.entries(currencyLabels).map(([code, label]) => <option key={code} value={code}>{label}</option>)}
+              </select>
+            </div>
+            <div>
+              <label>למטבע</label>
+              <select value={to} onChange={event => setTo(event.target.value)}>
+                {Object.entries(currencyLabels).map(([code, label]) => <option key={code} value={code}>{label}</option>)}
+              </select>
+            </div>
+          </div>
+        </article>
+        <article className="resultCard">
+          <span>סה״כ לחישוב</span>
+          <strong>{total.toLocaleString('he-IL')} {currencyLabels[from]}</strong>
+          <span>שווה בערך</span>
+          <strong className="converted">{converted.toLocaleString('he-IL', { maximumFractionDigits: to === 'JPY' ? 0 : 2 })} {currencyLabels[to]}</strong>
+          <small>שער 1 {currencyLabels[from]} ≈ {oneUnit.toLocaleString('he-IL', { maximumFractionDigits: 4 })} {currencyLabels[to]}</small>
+          <small>{rateStatus}</small>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 function App(){
   const [selectedId, setSelectedId] = useState('shibuyasky');
   const [filter, setFilter] = useState('הכל');
@@ -451,6 +534,7 @@ function App(){
       <a href="#route">מסלול</a>
       <a href="#hotels">מלונות</a>
       <a href="#transfers">הגעה</a>
+      <a href="#calculator">מחשבון</a>
       <a href="#nearby">בסביבה</a>
       <a href="#shopping">קניות</a>
     </nav>
@@ -598,6 +682,8 @@ function App(){
         </article>)}
       </div>
     </section>
+
+    <MoneyCalculator />
 
     <footer>
       המחירים באתר הם מחירי תכנון עדכניים/מקובלים ביין ונועדו לבניית תקציב. לפני רכישה בפועל כדאי לאמת באתר הרשמי, במיוחד באטרקציות עם מחיר דינמי או הזמנה מוגבלת.
