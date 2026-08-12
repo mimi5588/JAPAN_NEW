@@ -446,7 +446,6 @@ const fallbackRates = {
 
 function MoneyCalculator() {
   const [amount, setAmount] = useState(1000);
-  const [quantity, setQuantity] = useState(1);
   const [from, setFrom] = useState('JPY');
   const [to, setTo] = useState('ILS');
   const [rates, setRates] = useState(fallbackRates);
@@ -468,7 +467,7 @@ function MoneyCalculator() {
       .catch(() => setRateStatus('אין חיבור לשערים חיים — משתמשים בשערי ברירת מחדל'));
   }, []);
 
-  const total = Number(amount || 0) * Number(quantity || 1);
+  const total = Number(amount || 0);
   const totalInJpy = from === 'JPY' ? total : total / rates[from];
   const converted = to === 'JPY' ? totalInJpy : totalInJpy * rates[to];
   const oneUnit = from === 'JPY' ? rates[to] : (1 / rates[from]) * rates[to];
@@ -477,14 +476,12 @@ function MoneyCalculator() {
     <section className="calculator" id="calculator">
       <div className="sectionHeader">
         <p className="areaTag">כסף בזמן אמת</p>
-        <h2>מחשבון המרת מטבע וכרטיסים</h2>
+        <h2>מחשבון המרת מטבע</h2>
       </div>
       <div className="calculatorGrid">
         <article className="calculatorCard">
           <label>סכום</label>
           <input type="number" min="0" value={amount} onChange={event => setAmount(event.target.value)} />
-          <label>כמות / מספר כרטיסים</label>
-          <input type="number" min="1" value={quantity} onChange={event => setQuantity(event.target.value)} />
           <div className="currencyRow">
             <div>
               <label>ממטבע</label>
@@ -514,6 +511,8 @@ function MoneyCalculator() {
 }
 
 function App(){
+  const initialPage = window.location.hash?.replace('#', '') || 'home';
+  const [activePage, setActivePage] = useState(initialPage);
   const [selectedId, setSelectedId] = useState('shibuyasky');
   const [filter, setFilter] = useState('הכל');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -527,27 +526,39 @@ function App(){
     });
   }, [filter, categoryFilter]);
   const cities = ['הכל', ...Array.from(new Set(places.map(p => p.city)))];
+  const goToPage = (page) => {
+    setActivePage(page);
+    window.history.replaceState(null, '', `#${page}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const navItems = [
+    ['home', 'בית'],
+    ['map', 'מפה'],
+    ['route', 'מסלול'],
+    ['calculator', 'מחשבון'],
+    ['hotels', 'מלונות'],
+    ['transfers', 'הגעה'],
+    ['nearby', 'בסביבה'],
+    ['shopping', 'קניות']
+  ];
 
   return <main>
     <nav className="topbar" aria-label="ניווט מהיר">
-      <a href="#map">מפה</a>
-      <a href="#route">מסלול</a>
-      <a href="#calculator">מחשבון</a>
-      <a href="#hotels">מלונות</a>
-      <a href="#transfers">הגעה</a>
-      <a href="#nearby">בסביבה</a>
-      <a href="#shopping">קניות</a>
+      {navItems.map(([page, label]) => (
+        <button key={page} onClick={() => goToPage(page)} className={activePage === page ? 'activeNav' : ''}>{label}</button>
+      ))}
     </nav>
 
+    <section className={`pageSection ${activePage === 'home' ? 'activePage' : ''}`}>
     <section className="hero">
       <div>
         <p className="eyebrow">קוניצ׳יווה, יפן מחכה לכן</p>
         <h1>יפן - הטיול הגדול התחלנו !</h1>
         <p className="lead">טוקיו, האקונה, קיוטו, נארה ואוסקה — עם כל המקומות שביקשת, כולל שכונות ומקומות קרובים ששווה להוסיף כשכבר נמצאים באזור.</p>
         <div className="heroActions">
-          <a className="primaryAction" href="#map">לפתוח את המפה</a>
-          <a className="secondaryAction" href="#route">לראות את הימים</a>
-          <a className="secondaryAction moneyAction" href="#calculator">מחשבון המרה</a>
+          <button className="primaryAction" onClick={() => goToPage('map')}>לפתוח את המפה</button>
+          <button className="secondaryAction" onClick={() => goToPage('route')}>לראות את הימים</button>
+          <button className="secondaryAction moneyAction" onClick={() => goToPage('calculator')}>מחשבון המרה</button>
         </div>
       </div>
       <div className="heroCard">
@@ -561,9 +572,10 @@ function App(){
     <section className="notice">
       <b>הערת תכנון חשובה:</b> כדי להכניס 5 ימי טוקיו + 4 ימי קיוטו + אוסקה בתוך חלון הטיסות, אוסקה יוצאת צפופה. לכן הוספתי באתר גם “חלופות/אם מוסיפים יום” עבור קאיוקאן, אומדה סקיי והימג׳י.
     </section>
+    </section>
 
     <section className="layout">
-      <aside className="itinerary" id="route">
+      <aside className={`itinerary pageSection ${activePage === 'route' ? 'activePage' : ''}`} id="route">
         <h2>המסלול לפי ימים</h2>
         <div className="dayPicker" aria-label="בחירת יום במסלול">
           {itinerary.map(day => <button key={day.day} onClick={() => setSelectedDay(day.day)} className={selectedDay === day.day ? 'selectedDay' : ''}>
@@ -588,7 +600,7 @@ function App(){
         </article>)}
       </aside>
 
-      <section className="mapPanel" id="map">
+      <section className={`mapPanel pageSection ${activePage === 'map' ? 'activePage' : ''}`} id="map">
         <div className="toolbar">
           <h2>מפה</h2>
           <select value={filter} onChange={e=>setFilter(e.target.value)} aria-label="סינון עיר">
@@ -631,14 +643,14 @@ function App(){
       </section>
     </section>
 
-    <section className="extras" id="shopping">
+    <section className={`extras pageSection ${activePage === 'shopping' ? 'activePage' : ''}`} id="shopping">
       <h2>תוספות חכמות ליד המקומות שביקשת</h2>
       <div className="extraGrid">
         {extras.map(e => <article key={e.title}><p>{e.city}</p><h3>{e.title}</h3><span>{e.text}</span></article>)}
       </div>
     </section>
 
-    <section className="hotels" id="hotels">
+    <section className={`hotels pageSection ${activePage === 'hotels' ? 'activePage' : ''}`} id="hotels">
       <h2>מלונות מומלצים לפי לילות</h2>
       <div className="hotelGrid">
         {hotels.map(hotel => <article key={hotel.dates}>
@@ -656,7 +668,7 @@ function App(){
       </div>
     </section>
 
-    <section className="nearby" id="nearby">
+    <section className={`nearby pageSection ${activePage === 'nearby' ? 'activePage' : ''}`} id="nearby">
       <h2>מה יש ליד: אוכל, קפה, סושי וקניות</h2>
       <div className="nearbyGrid">
         {nearbyGuide.map(area => <article key={area.area}>
@@ -672,7 +684,7 @@ function App(){
       </div>
     </section>
 
-    <section className="transfers" id="transfers">
+    <section className={`transfers pageSection ${activePage === 'transfers' ? 'activePage' : ''}`} id="transfers">
       <h2>דרכי הגעה וזמני נסיעה בין האזורים</h2>
       <div className="transferGrid">
         {transfers.map((t, i) => <article key={i}>
@@ -684,7 +696,9 @@ function App(){
       </div>
     </section>
 
-    <MoneyCalculator />
+    <div className={`pageSection ${activePage === 'calculator' ? 'activePage' : ''}`}>
+      <MoneyCalculator />
+    </div>
 
     <footer>
       המחירים באתר הם מחירי תכנון עדכניים/מקובלים ביין ונועדו לבניית תקציב. לפני רכישה בפועל כדאי לאמת באתר הרשמי, במיוחד באטרקציות עם מחיר דינמי או הזמנה מוגבלת.
