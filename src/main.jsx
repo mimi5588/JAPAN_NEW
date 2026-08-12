@@ -532,9 +532,9 @@ function App(){
     <nav className="topbar" aria-label="ניווט מהיר">
       <a href="#map">מפה</a>
       <a href="#route">מסלול</a>
+      <a href="#calculator">מחשבון</a>
       <a href="#hotels">מלונות</a>
       <a href="#transfers">הגעה</a>
-      <a href="#calculator">מחשבון</a>
       <a href="#nearby">בסביבה</a>
       <a href="#shopping">קניות</a>
     </nav>
@@ -547,6 +547,7 @@ function App(){
         <div className="heroActions">
           <a className="primaryAction" href="#map">לפתוח את המפה</a>
           <a className="secondaryAction" href="#route">לראות את הימים</a>
+          <a className="secondaryAction moneyAction" href="#calculator">מחשבון המרה</a>
         </div>
       </div>
       <div className="heroCard">
