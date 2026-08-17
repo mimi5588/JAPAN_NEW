@@ -1,4 +1,4 @@
-const CACHE_NAME = 'japan-trip-v9';
+const CACHE_NAME = 'japan-trip-v10';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg', './japan-background.png'];
 
 self.addEventListener('install', event => {

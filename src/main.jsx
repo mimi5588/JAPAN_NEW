@@ -5,7 +5,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './styles.css';
 
-const APP_VERSION = '2026-08-17-cache-v9';
+const APP_VERSION = '2026-08-17-cache-v10-free-labels';
 window.__JAPAN_TRIP_VERSION__ = APP_VERSION;
 
 if ('serviceWorker' in navigator) {
@@ -460,7 +460,7 @@ const tiktokPicks = [
     icon: '🎬',
     title: 'Anime Tokyo Station',
     area: 'Ikebukuro, Tokyo',
-    source: 'For Free!? 10 places in Japan',
+    source: 'אטרקציה בחינם',
     text: 'מרכז אנימה חינמי באיקבוקורו עם תערוכות, עבודות אנימה ואירועים מתחלפים. טוב לעצירה קצרה אם אתן באזור Sunshine City / איקבוקורו.',
     bestTime: 'כ־4 דקות הליכה מתחנת Ikebukuro. לשלב עם Tamagotchi Factory או קניות באזור.',
     mapsQuery: 'Anime Tokyo Station Ikebukuro Tokyo',
@@ -470,7 +470,7 @@ const tiktokPicks = [
     icon: '🤼',
     title: 'Sumo Museum',
     area: 'Ryogoku, Tokyo',
-    source: 'For Free!? 10 places in Japan',
+    source: 'אטרקציה בחינם',
     text: 'מוזיאון קטן וחינמי על עולם הסומו: היסטוריה, טקסים, תמונות ופריטים מהטורנירים. מקום קצר אבל מיוחד תרבותית.',
     bestTime: 'כדאי לשלב אם כבר באזור אסאקוסה/סומידה או בדרך בין אטרקציות. לבדוק שעות פתיחה לפני הגעה.',
     mapsQuery: 'Sumo Museum Ryogoku Tokyo',
@@ -480,7 +480,7 @@ const tiktokPicks = [
     icon: '🌃',
     title: 'Kobe City Hall Observation Lobby',
     area: 'Sannomiya, Kobe',
-    source: 'For Free!? 10 places in Japan',
+    source: 'אטרקציה בחינם',
     text: 'תצפית חינמית על קובה, ההרים והים. לא חובה במסלול המקורי, אבל שווה אם מוסיפים עצירה בקובה בדרך מאוסקה או מהימג׳י.',
     bestTime: 'כ־6 דקות הליכה מתחנת Sannomiya. יפה ביום וגם בערב, אם יש זמן בלי ללחוץ את המסלול.',
     mapsQuery: 'Kobe City Hall Observation Lobby',
