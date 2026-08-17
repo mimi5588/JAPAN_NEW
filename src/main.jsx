@@ -314,6 +314,56 @@ const nearbyGuide = [
   }
 ];
 
+const japanFacts = [
+  'ביפן נהוג לעמוד בצד שמאל במדרגות נעות בטוקיו, אבל באוסקה לרוב עומדים בצד ימין.',
+  'ברוב הרכבות ביפן לא מדברים בקול בטלפון — שולחים הודעות ושומרים על שקט.',
+  'קונביני כמו 7‑Eleven, Lawson ו־FamilyMart הם ממש תחנת הצלה: אוכל, קפה, שירותים, משיכת כסף ומטריות.',
+  'במקדשים ושערי טוריאי מקובל לעבור בצדדים ולא ממש באמצע — האמצע נחשב דרך סמלית לאלים.',
+  'פחי אשפה ברחוב נדירים יחסית. שומרים שקית קטנה בתיק וזורקים בקונביני/מלון.',
+  'במסעדות רבות אין טיפ — שירות טוב הוא חלק מהתרבות ולא מוסיפים כסף.',
+  'במעברי חציה גדולים כמו שיבויה כדאי לבחור נקודת מפגש ברורה מראש, כי קל להיפרד בקהל.'
+];
+
+const homeLearningCards = [
+  { title:'רקע קצר על יפן', text:'יפן משלבת מסורת עתיקה עם עירוניות עתידנית: מקדשים, רכבות מדויקות, אוכל רחוב, תרבות פופ, טבע ואסתטיקה מוקפדת. בטיול הזה אתן נוגעות בכל העולמות האלה — טוקיו המהירה, קיוטו המסורתית, אוסקה הקולינרית והאקונה הירוקה.' },
+  { title:'רקע היסטורי קצר', text:'קיוטו הייתה בירת יפן יותר מאלף שנה ולכן מרגישה כמו לב היסטורי: מקדשים, גנים, גיון וטקסיות. טוקיו, שנקראה בעבר אדו, הפכה למרכז השלטון בתקופת השוגונים ובהמשך לבירה מודרנית. אוסקה הייתה תמיד עיר מסחר ואוכל — ולכן היא מרגישה פתוחה, צבעונית וטעימה.' },
+  { title:'תזכורות זהב לטיול', text:'לשמור דרכון/צילום דרכון, להזמין מראש גיבלי/פוקימון/שיבויה סקיי, לבדוק מזג אוויר ערב קודם, להחזיק מזומן קטן ביין, ולתכנן כל יום עם “עוגן” אחד חשוב כדי לא לרוץ מדי.' }
+];
+
+const pageEnhancements = {
+  map: [
+    { title:'טיפ למפה', text:'כשאתן באזור מסוים, סננו לפי עיר ואז לפי סוג מקום במקרא. ככה רואים רק מקדשים, קניות או אוכל בלי בלגן.' },
+    { title:'שימוש חכם', text:'לחיצה על מקום פותחת כרטיס עם מחיר, זמן מומלץ וקישור לגוגל מפות. בטיול עצמו זה הכי נוח לניווט מהיר.' }
+  ],
+  route: [
+    { title:'איך לעבוד עם המסלול', text:'המסלול הוא בסיס, לא כלא. אם יום מרגיש עמוס — מחקו תחנה אחת והשאירו זמן לשיטוט. ביפן דווקא הדברים הלא מתוכננים נהיים רגעים טובים.' },
+    { title:'כלל 09:00–22:00', text:'הלו״ז בנוי מ־09:00 עד 22:00, אבל כדאי להשאיר לפחות שעה מרווח ביום לנסיעות, תורים, קפה או סתם “וואו תראו את זה”.' }
+  ],
+  hotels: [
+    { title:'טיפ מלונות', text:'בטוקיו עדיף להיות ליד קו רכבת מרכזי יותר מאשר “במלון יפה אבל מנותק”. בקיוטו בחרי בין חוויית גיון לבין נוחות Kyoto Station.' },
+    { title:'לפני שסוגרים', text:'לבדוק גודל חדר במ״ר, מרחק הליכה מהתחנה, מדיניות מזוודות וצ׳ק אין. ביפן חדרים יכולים להיות קטנים מאוד.' }
+  ],
+  transfers: [
+    { title:'טיפ תחבורה', text:'לנסיעות בין ערים שמרו את שם התחנה באנגלית ויפנית. בתחנות גדולות כמו Tokyo / Shinjuku / Osaka קל להתבלבל ביציאות.' },
+    { title:'מזוודות', text:'שווה לשקול שירות שליחת מזוודות בין מלונות — Yamato/TA-Q-BIN — במיוחד בין טוקיו, קיוטו ואוסקה.' }
+  ],
+  nearby: [
+    { title:'איך לבחור אוכל', text:'אם עייפים, לכו על סושי מסוע/ראמן/קונביני — זה מהיר, זול וטעים. אם יש ערב פנוי, חפשו סמטאות כמו פונטוצ׳ו או דוטונבורי.' },
+    { title:'קפה ומנוחה', text:'סטארבקס ביפן נוח להפסקה ושירותים, אבל שווה גם לנסות קפה מקומי קטן כשיש זמן.' }
+  ],
+  shopping: [
+    { title:'קניות חכמות', text:'דון קיחוטה טוב לקניות גדולות ומשונות, אבל לפעמים בתי מרקחת כמו Matsumoto Kiyoshi / Welcia זולים יותר לקוסמטיקה ופארם.' },
+    { title:'לפני קופה', text:'לבדוק Tax Free, לשמור דרכון, ולוודא שהמוצרים שאתן צריכות בטיול עצמו לא נארזים בשקית אטומה שאסור לפתוח עד היציאה מיפן.' }
+  ]
+};
+
+const konbiniTips = [
+  { title:'7‑Eleven', text:'מעולה לאוניגירי, כריכים, קפה זול, משיכת כסף בכספומט, קינוחים וארוחות מוכנות שמחממים במקום.' },
+  { title:'Lawson', text:'חזקים בקינוחים, עוף מטוגן, שתייה מיוחדת ונשנושים. שווה להציץ במדף המתוקים.' },
+  { title:'FamilyMart', text:'Famichiki הוא קלאסיקה. טוב גם לארוחות קלות, גרביים/מטענים קטנים וציוד חירום.' },
+  { title:'חנויות פארם זולות', text:'Matsumoto Kiyoshi, Welcia, Sundrug ו־Daikoku Drug — לקוסמטיקה, מסכות פנים, פלסטרים, משככי כאבים ומוצרים יפניים מוכרים.' }
+];
+
 function googleMapsUrl(place){ return `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`; }
 function googleMapsSearchUrl(query){ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`; }
 function iconForPlace(place) {
@@ -506,7 +556,40 @@ function MoneyCalculator() {
           <small>{rateStatus}</small>
         </article>
       </div>
+      <div className="konbiniGrid">
+        {konbiniTips.map(tip => (
+          <article key={tip.title}>
+            <h3>{tip.title}</h3>
+            <p>{tip.text}</p>
+          </article>
+        ))}
+      </div>
     </section>
+  );
+}
+
+function InfoCards({ items }) {
+  return (
+    <div className="infoGrid">
+      {items.map(item => (
+        <article key={item.title}>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function DidYouKnowTicker() {
+  return (
+    <div className="ticker" aria-label="הידעת">
+      <div className="tickerTrack">
+        {[...japanFacts, ...japanFacts].map((fact, index) => (
+          <span key={`${fact}-${index}`}>💡 הידעת? {fact}</span>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -615,11 +698,14 @@ function App(){
     <section className="notice">
       <b>הערת תכנון חשובה:</b> כדי להכניס 5 ימי טוקיו + 4 ימי קיוטו + אוסקה בתוך חלון הטיסות, אוסקה יוצאת צפופה. לכן הוספתי באתר גם “חלופות/אם מוסיפים יום” עבור קאיוקאן, אומדה סקיי והימג׳י.
     </section>
+    <DidYouKnowTicker />
+    <InfoCards items={homeLearningCards} />
     </section>
 
     <section className="layout">
       <aside className={`itinerary pageSection ${activePage === 'route' ? 'activePage' : ''}`} id="route">
         <h2>המסלול לפי ימים</h2>
+        <InfoCards items={pageEnhancements.route} />
         <div className="editToolbar">
           <button onClick={() => setEditMode(mode => !mode)} className={`mainEditButton ${editMode ? 'activeEdit' : ''}`}>
             {editMode ? '✅ סיום עריכה ושמירה' : '✏️ עריכת מסלול'}
@@ -718,11 +804,13 @@ function App(){
             <span>{index + 1} · {cityNames[place.city]}</span>{place.name}
           </button>)}
         </div>
+        <InfoCards items={pageEnhancements.map} />
       </section>
     </section>
 
     <section className={`extras pageSection ${activePage === 'shopping' ? 'activePage' : ''}`} id="shopping">
       <h2>תוספות חכמות ליד המקומות שביקשת</h2>
+      <InfoCards items={pageEnhancements.shopping} />
       <div className="extraGrid">
         {extras.map(e => <article key={e.title}><p>{e.city}</p><h3>{e.title}</h3><span>{e.text}</span></article>)}
       </div>
@@ -730,6 +818,7 @@ function App(){
 
     <section className={`hotels pageSection ${activePage === 'hotels' ? 'activePage' : ''}`} id="hotels">
       <h2>מלונות מומלצים לפי לילות</h2>
+      <InfoCards items={pageEnhancements.hotels} />
       <div className="hotelGrid">
         {hotels.map(hotel => <article key={hotel.dates}>
           <p className="hotelDates">{hotel.dates}</p>
@@ -748,6 +837,7 @@ function App(){
 
     <section className={`nearby pageSection ${activePage === 'nearby' ? 'activePage' : ''}`} id="nearby">
       <h2>מה יש ליד: אוכל, קפה, סושי וקניות</h2>
+      <InfoCards items={pageEnhancements.nearby} />
       <div className="nearbyGrid">
         {nearbyGuide.map(area => <article key={area.area}>
           <p className="areaTag">{area.bestFor}</p>
@@ -764,6 +854,7 @@ function App(){
 
     <section className={`transfers pageSection ${activePage === 'transfers' ? 'activePage' : ''}`} id="transfers">
       <h2>דרכי הגעה וזמני נסיעה בין האזורים</h2>
+      <InfoCards items={pageEnhancements.transfers} />
       <div className="transferGrid">
         {transfers.map((t, i) => <article key={i}>
           <div className="routeTitle"><strong>{t.from}</strong><span>←</span><strong>{t.to}</strong></div>
