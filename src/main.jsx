@@ -364,6 +364,45 @@ const konbiniTips = [
   { title:'חנויות פארם זולות', text:'Matsumoto Kiyoshi, Welcia, Sundrug ו־Daikoku Drug — לקוסמטיקה, מסכות פנים, פלסטרים, משככי כאבים ומוצרים יפניים מוכרים.' }
 ];
 
+const donkiShoppingGuide = [
+  {
+    icon: '💄',
+    category: 'ביוטי וקוסמטיקה',
+    items: ['מסכות פנים יפניות', 'קרם הגנה Anessa / Biore UV', 'שפתונים וטינט Canmake / Cezanne', 'פדים להסרת איפור', 'מברשות ואביזרי שיער'],
+    tip: 'לבדוק גם בבתי מרקחת — לפעמים אותו מוצר זול יותר ב־Matsumoto Kiyoshi או Sundrug.'
+  },
+  {
+    icon: '🍫',
+    category: 'חטיפים ומתוקים',
+    items: ['KitKat בטעמים יפניים', 'Tokyo Banana', 'Pocky / Pretz', 'Hi-Chew', 'Matcha snacks', 'חטיפי אורז וסנביי'],
+    tip: 'לקנות חטיפים קלים בסוף הטיול כדי שלא יתפסו מקום במזוודה כל הדרך.'
+  },
+  {
+    icon: '🧴',
+    category: 'פארם ודברים שימושיים',
+    items: ['פלסטרים איכותיים', 'מדבקות חימום/קירור', 'טיפות עיניים יפניות', 'מוצרי נסיעות קטנים', 'מגבונים ומסכות'],
+    tip: 'אם מוצר רפואי לא מוכר — לא לקנות בלי להבין שימוש ומינון. עדיף להיעזר בצוות או בתרגום.'
+  },
+  {
+    icon: '🎁',
+    category: 'מזכרות ומתנות',
+    items: ['צ׳ופסטיקס יפים', 'כוסות/קערות קטנות', 'מחזיקי מפתחות', 'מגנטים', 'גרביים מצחיקות', 'מוצרים של סנריו/אנימה'],
+    tip: 'בדון קיחוטה יש הרבה דברים חמודים, אבל מזכרות מסורתיות לפעמים יפות יותר ליד מקדשים ושווקים.'
+  },
+  {
+    icon: '🔌',
+    category: 'גאדג׳טים ונוחות לטיול',
+    items: ['מטען נייד', 'כבלי טעינה', 'מתאמים', 'מטרייה מתקפלת', 'ארגוניות למזוודה', 'תיקי קניות מתקפלים'],
+    tip: 'לבדוק התאמה לחשמל/USB לפני קנייה, במיוחד במוצרים חשמליים.'
+  },
+  {
+    icon: '🧾',
+    category: 'לפני הקופה',
+    items: ['להביא דרכון ל־Tax Free', 'להשוות מחיר אם זה מוצר יקר', 'לא לפתוח שקית Tax Free סגורה עד היציאה מיפן', 'לבדוק מקום במזוודה'],
+    tip: 'דון קיחוטה יכול להיות כאוס מתוק — לבוא עם רשימה קצרה ולסמן מה באמת חשוב.'
+  }
+];
+
 function googleMapsUrl(place){ return `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}`; }
 function googleMapsSearchUrl(query){ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`; }
 function iconForPlace(place) {
@@ -826,6 +865,30 @@ function App(){
     <section className={`extras pageSection ${activePage === 'shopping' ? 'activePage' : ''}`} id="shopping">
       <h2>תוספות חכמות ליד המקומות שביקשת</h2>
       <InfoCards items={pageEnhancements.shopping} />
+      <section className="donkiGuide" aria-label="המלצות קנייה מדון קיחוטה">
+        <div className="donkiHeader">
+          <p>🛒 רשימת קניות חכמה</p>
+          <h3>מה כדאי לקנות בדון קיחוטה</h3>
+          <span>רשימה פרקטית לטוקיו/אוסקה: דברים שווים, מתנות קטנות, חטיפים, ביוטי ומה לבדוק לפני הקופה.</span>
+          <a href={googleMapsSearchUrl('Don Quijote near me Japan')} target="_blank" rel="noreferrer">
+            לפתוח דון קיחוטה קרוב בגוגל מפות <ExternalLink size={14}/>
+          </a>
+        </div>
+        <div className="donkiGrid">
+          {donkiShoppingGuide.map(group => (
+            <article key={group.category}>
+              <strong>{group.icon}</strong>
+              <h4>{group.category}</h4>
+              <ul>{group.items.map(item => <li key={item}>{item}</li>)}</ul>
+              <small>{group.tip}</small>
+            </article>
+          ))}
+        </div>
+        <div className="tiktokNote">
+          <b>🎥 המלצות מטיקטוק</b>
+          <span>אין לי גישה אוטומטית לתיקיית הטיקטוק הפרטית שלך. שלחי לי קישורים לסרטונים, צילומי מסך או רשימת מוצרים — ואני אעלה לאתר “נבחר מטיקטוק” עם המוצרים, איפה לקנות ולמה שווה לשים לב.</span>
+        </div>
+      </section>
       <div className="extraGrid">
         {extras.map(e => <article key={e.title}><p>{e.city}</p><h3>{e.title}</h3><span>{e.text}</span></article>)}
       </div>
