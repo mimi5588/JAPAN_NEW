@@ -10,18 +10,9 @@ window.__JAPAN_TRIP_VERSION__ = APP_VERSION;
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').then(registration => {
-      registration.addEventListener('updatefound', () => {
-        const worker = registration.installing;
-        if (!worker) return;
-        worker.addEventListener('statechange', () => {
-          if (worker.state === 'activated' && navigator.serviceWorker.controller) {
-            window.location.reload();
-          }
-        });
-      });
-      registration.update?.();
-    }).catch(() => {});
+    navigator.serviceWorker.getRegistrations()
+      .then(registrations => registrations.forEach(registration => registration.unregister()))
+      .catch(() => {});
   });
 }
 
@@ -40,7 +31,7 @@ const places = [
   { id:'skytree', city:'Tokyo', name:'טוקיו סקייטרי + סולמאצ׳י', lat:35.7101, lng:139.8107, price:'בערך ¥2,100–¥3,400+ לפי קומבינציה/שעה', booking:'מומלץ להזמין מראש, במיוחד ערב/סופ״ש', time:'2–3 שעות', note:'בערב יש תאורה יפה; ליד: מרכז הקניות סולמאצ׳י ואקווריום סומידה.' },
   { id:'meiji', city:'Tokyo', name:'מקדש מייג׳י', lat:35.6764, lng:139.6993, price:'חינם', booking:'לא צריך', time:'1–1.5 שעות', note:'לשלב עם פארק יויוגי, רחוב טקשיטה ואומוטסנדו.' },
   { id:'harajuku', city:'Tokyo', name:'הרג׳וקו ואומוטסנדו', lat:35.6717, lng:139.7064, price:'חינם', booking:'לא צריך', time:'2–3 שעות', note:'אזור שלם לקניות, קרפים, בתי קפה וחנויות עיצוב.' },
-  { id:'starbucks-reserve-roastery', city:'Tokyo', name:'Starbucks Reserve Roastery Tokyo - נאקמגורו', lat:35.6492, lng:139.6922, price:'כניסה חינם; קפה/מאפים בתשלום', booking:'לא חובה; ייתכנו תורים בשעות עמוסות', time:'1–1.5 שעות', note:'המלצת TikTok: סניף ענק ומעוצב של Starbucks Reserve Roastery ליד נהר Meguro. מתאים להפסקת קפה, צילום וקניית מוצרים מיוחדים של סטארבקס.' },
+  { id:'starbucks-reserve-roastery', city:'Tokyo', name:'סטארבקס ריזרב רוסטרי טוקיו - נאקמגורו', lat:35.6492, lng:139.6922, price:'כניסה חינם; קפה/מאפים בתשלום', booking:'לא חובה; ייתכנו תורים בשעות עמוסות', time:'1–1.5 שעות', note:'המלצה מהטיקטוק: סניף ענק ומעוצב של סטארבקס ריזרב רוסטרי ליד נהר מגורו. מתאים להפסקת קפה, צילום וקניית מוצרים מיוחדים של סטארבקס.' },
   { id:'shibuya', city:'Tokyo', name:'מעבר שיבויה + האצ׳יקו', lat:35.6595, lng:139.7005, price:'חינם', booking:'לא צריך', time:'1 שעה', note:'שווה להגיע לפני שיבויה סקיי ולתת זמן לשוטט.' },
   { id:'shibuyasky', city:'Tokyo', name:'שיבויה סקיי בשקיעה', lat:35.6585, lng:139.7020, price:'מבוגר אונליין: כ־¥2,700 עד 14:59 / כ־¥3,400 מ־15:00', booking:'כן — להזמין מראש; שקיעה נחטפת מהר', time:'1.5–2 שעות', note:'לכוון כניסה 60–90 דקות לפני השקיעה.' },
   { id:'tsukiji', city:'Tokyo', name:'שוק צוקיג׳י החיצוני', lat:35.6655, lng:139.7707, price:'חינם; אוכל בתשלום', booking:'לא צריך', time:'1.5–2 שעות', note:'הכי טוב בבוקר. ליד: גני האמאריקיו.' },
@@ -56,12 +47,12 @@ const places = [
   { id:'gotokuji', city:'Tokyo', name:'מקדש גוטוקוג׳י, סטגאיה', lat:35.6470, lng:139.6470, price:'חינם', booking:'לא צריך', time:'1–1.5 שעות', note:'מקדש חתולי המזל. ליד: סטגאיה האצ׳ימאנגו ושימוקיטזאווה בהמשך.' },
   { id:'donki-shibuya', city:'Tokyo', name:'MEGA דון קיחוטה שיבויה', lat:35.6607, lng:139.6978, price:'כניסה חינם; קניות בתשלום', booking:'לא צריך', time:'1–2 שעות', note:'כלבו ענק לקוסמטיקה, חטיפים, מזכרות ודברים יפניים מוזרים וטובים. הכי נוח לשלב ביום שיבויה אחרי שיבויה סקיי או לפני.' },
   { id:'tokyo-shopping', city:'Tokyo', name:'מרכזי קניות בטוקיו: שיבויה/גינזה/איקבוקורו', lat:35.6712, lng:139.7649, price:'חינם; קניות בתשלום', booking:'לא צריך', time:'2–4 שעות', note:'גינזה סיקס, טוקיו מידטאון, שיבויה פארקו, שיבויה 109, לאבינה/לומינה בתחנות הגדולות.' },
-  { id:'anime-tokyo-station', city:'Tokyo', name:'Anime Tokyo Station - Ikebukuro', lat:35.7316, lng:139.7139, price:'חינם', booking:'לא צריך בדרך כלל', time:'45–75 דקות', note:'המלצת TikTok: מרכז אנימה חינמי באיקבוקורו עם תערוכות, עבודות אנימה ואירועים מתחלפים. כ־4 דקות הליכה מתחנת Ikebukuro.' },
-  { id:'sumo-museum', city:'Tokyo', name:'Sumo Museum - Ryogoku', lat:35.6971, lng:139.7932, price:'חינם', booking:'לא צריך בדרך כלל; לבדוק שעות פתיחה', time:'30–60 דקות', note:'המלצת TikTok: מוזיאון קטן וחינמי על ההיסטוריה והטקסים של סומו, ליד Ryogoku Kokugikan. טוב לשילוב קצר באזור אסאקוסה/סומידה.' },
-  { id:'sanrio-harajuku', city:'Tokyo', name:'Sanrio / Hello Kitty Store & Cafe', lat:35.6715, lng:139.7048, price:'כניסה חינם; קניות/קפה בתשלום', booking:'לא צריך בדרך כלל', time:'45–90 דקות', note:'המלצת TikTok: חנות/קפה צבעוני של Sanrio עם Hello Kitty ומוצרים מתוקים. מתאים ליום הרג׳וקו/שיבויה.' },
-  { id:'harry-potter-store-harajuku', city:'Tokyo', name:'Harry Potter Store Harajuku', lat:35.6694, lng:139.7053, price:'כניסה חינם; קניות בתשלום', booking:'לא צריך בדרך כלל', time:'45–90 דקות', note:'המלצת TikTok: חנות גדולה עם מרצ׳נדייז בלעדי, אווירת הוגוורטס ו־Butterbeer Bar. מתאים לחובבי הארי פוטר ביום הרג׳וקו.' },
-  { id:'caspace-tokyo', city:'Tokyo', name:'Cas:pace - בניית כיסוי לטלפון', lat:35.6702, lng:139.7057, price:'בתשלום לפי כיסוי ותוספות', booking:'לא צריך בדרך כלל', time:'45–90 דקות', note:'המלצת TikTok: חנות שבה בונים/מעצבים כיסוי טלפון אישי — מזכרת חמודה ושימושית מטוקיו.' },
-  { id:'tamagotchi-factory', city:'Tokyo', name:'Tamagotchi Factory', lat:35.7304, lng:139.7180, price:'כניסה חינם; מוצר/חוויה בתשלום אם קונים', booking:'לא צריך בדרך כלל; לבדוק עומסים', time:'45–90 דקות', note:'המלצת TikTok: חוויית Tamagotchi צבעונית שבה אפשר להכין/לבנות טמגוצ׳י אישי. מתאים במיוחד אם כבר באזור איקבוקורו.' },
+  { id:'anime-tokyo-station', city:'Tokyo', name:'תחנת האנימה של טוקיו - איקבוקורו', lat:35.7316, lng:139.7139, price:'חינם', booking:'לא צריך בדרך כלל', time:'45–75 דקות', note:'אטרקציה בחינם: מרכז אנימה באיקבוקורו עם תערוכות, עבודות אנימה ואירועים מתחלפים. כ־4 דקות הליכה מתחנת איקבוקורו.' },
+  { id:'sumo-museum', city:'Tokyo', name:'מוזיאון הסומו - ריוגוקו', lat:35.6971, lng:139.7932, price:'חינם', booking:'לא צריך בדרך כלל; לבדוק שעות פתיחה', time:'30–60 דקות', note:'אטרקציה בחינם: מוזיאון קטן על ההיסטוריה והטקסים של סומו, ליד אולם הסומו ריוגוקו קוקוגיקן. טוב לשילוב קצר באזור אסאקוסה/סומידה.' },
+  { id:'sanrio-harajuku', city:'Tokyo', name:'חנות וקפה סנריו / הלו קיטי', lat:35.6715, lng:139.7048, price:'כניסה חינם; קניות/קפה בתשלום', booking:'לא צריך בדרך כלל', time:'45–90 דקות', note:'חנות מומלצת בטוקיו: חנות/קפה צבעוני של סנריו עם הלו קיטי ומוצרים מתוקים. מתאים ליום הרג׳וקו/שיבויה.' },
+  { id:'harry-potter-store-harajuku', city:'Tokyo', name:'חנות הארי פוטר בהרג׳וקו', lat:35.6694, lng:139.7053, price:'כניסה חינם; קניות בתשלום', booking:'לא צריך בדרך כלל', time:'45–90 דקות', note:'חנות מומלצת בטוקיו: חנות גדולה עם מרצ׳נדייז בלעדי, אווירת הוגוורטס ובר בירצפת. מתאים לחובבי הארי פוטר ביום הרג׳וקו.' },
+  { id:'caspace-tokyo', city:'Tokyo', name:'קייספייס - בניית כיסוי לטלפון', lat:35.6702, lng:139.7057, price:'בתשלום לפי כיסוי ותוספות', booking:'לא צריך בדרך כלל', time:'45–90 דקות', note:'חנות מומלצת בטוקיו: בונים/מעצבים כיסוי טלפון אישי — מזכרת חמודה ושימושית מטוקיו.' },
+  { id:'tamagotchi-factory', city:'Tokyo', name:'מפעל טמגוצ׳י', lat:35.7304, lng:139.7180, price:'כניסה חינם; מוצר/חוויה בתשלום אם קונים', booking:'לא צריך בדרך כלל; לבדוק עומסים', time:'45–90 דקות', note:'חנות מומלצת בטוקיו: חוויה צבעונית שבה אפשר להכין/לבנות טמגוצ׳י אישי. מתאים במיוחד אם כבר באזור איקבוקורו.' },
   { id:'hakoneashi', city:'Hakone', name:'אגם אשי + מקדש האקונה', lat:35.2048, lng:139.0255, price:'המקדש חינם; שייט/רכבלים בתשלום', booking:'מומלץ כרטיס תחבורה Hakone Freepass', time:'3–4 שעות', note:'אם מזג האוויר טוב אולי תראו את פוג׳י.' },
   { id:'hakoneopen', city:'Hakone', name:'המוזיאון הפתוח בהאקונה', lat:35.2447, lng:139.0508, price:'מבוגר סביב ¥2,000; אונליין לעיתים ¥1,800', booking:'מומלץ אונליין לחיסכון זמן/כסף', time:'1.5–3 שעות', note:'פתוח לרוב 9:00–17:00, כניסה אחרונה 16:30.' },
   { id:'kiyomizu', city:'Kyoto', name:'קיומיזו־דרה + סאננזקה', lat:34.9949, lng:135.7850, price:'קיומיזו־דרה סביב ¥500', booking:'לא צריך', time:'3–4 שעות', note:'לשלב עם ניננזקה, סאננזקה ופגודת יאסאקה.' },
@@ -77,14 +68,14 @@ const places = [
   { id:'tsutenkaku', city:'Osaka', name:'מגדל צוטנקאקו ושינסקאי', lat:34.6525, lng:135.5063, price:'תצפית סביב ¥1,000+', booking:'לא חובה', time:'2 שעות', note:'אזור רטרו, קושיקאצו וסמטת ג׳אנג׳אן יוקוצ׳ו.' },
   { id:'kuromon', city:'Osaka', name:'שוק קורומון', lat:34.6646, lng:135.5063, price:'חינם; אוכל בתשלום', booking:'לא צריך', time:'1.5–2 שעות', note:'לשלב עם נאמבה ודוטונבורי.' },
   { id:'dotonbori', city:'Osaka', name:'שינסהיבאשי ודוטונבורי', lat:34.6687, lng:135.5010, price:'חינם', booking:'לא צריך', time:'3–4 שעות', note:'שלט גליקו, אוכל רחוב וסמטת הוזנג׳י יוקוצ׳ו.' },
-  { id:'ramen-ichiza', city:'Osaka', name:'Ramen Ichiza Osaka', lat:34.6689, lng:135.5015, price:'בערך ¥1,000–¥2,500 למנה לפי דוכן', booking:'לא צריך בדרך כלל; ייתכנו תורים', time:'1–1.5 שעות', note:'המלצת TikTok: מתחם ראמן עם 9 חנויות תחת קורת גג אחת ליד דוטונבורי. מומלץ לבדוק את Bettei Takei לטסוקמן דגים עשיר, Kaneda לצ׳יקן פאייטן קרמי, ו־Gyukkoshi לראמן Wagyu/בקר.' },
+  { id:'ramen-ichiza', city:'Osaka', name:'ראמן איצ׳יזה אוסקה', lat:34.6689, lng:135.5015, price:'בערך ¥1,000–¥2,500 למנה לפי דוכן', booking:'לא צריך בדרך כלל; ייתכנו תורים', time:'1–1.5 שעות', note:'ראמן מומלץ: מתחם ראמן עם 9 חנויות תחת קורת גג אחת ליד דוטונבורי. מומלץ לבדוק את בטיי טקיי לטסוקמן דגים עשיר, קאנדה לצ׳יקן פאייטן קרמי, וגיוקושי לראמן בקר/ואגיו.' },
   { id:'donki-dotonbori', city:'Osaka', name:'דון קיחוטה דוטונבורי', lat:34.6691, lng:135.5031, price:'כניסה חינם; קניות בתשלום', booking:'לא צריך', time:'1–2 שעות', note:'אחד הסניפים הכי מפורסמים, ממש ליד התעלה. לשלב בערב אוסקה עם דוטונבורי.' },
   { id:'namba-parks', city:'Osaka', name:'נאמבה פארקס / שינסהיבאשי סוז׳י', lat:34.6617, lng:135.5016, price:'חינם; קניות בתשלום', booking:'לא צריך', time:'2–3 שעות', note:'מרכזי קניות גדולים ונוחים סביב נאמבה, כולל רחוב קניות מקורה ארוך.' },
   { id:'shitennoji', city:'Osaka', name:'מקדש שיטנו־ג׳י', lat:34.6539, lng:135.5169, price:'חלקים חינם; גנים/אולמות סביב ¥300–¥500', booking:'לא צריך', time:'1–1.5 שעות', note:'אחד המקדשים העתיקים ביפן.' },
   { id:'osakacastle', city:'Osaka', name:'טירת אוסקה', lat:34.6873, lng:135.5262, price:'מוזיאון הטירה סביב ¥600', booking:'לא חובה', time:'2–3 שעות', note:'לשלב עם פארק הטירה.' },
   { id:'kaiyukan', city:'Osaka', name:'אקווריום קאיוקאן', lat:34.6545, lng:135.4289, price:'מבוגר סביב ¥2,700; בימים עמוסים ייתכן ¥3,200–¥3,500', booking:'מומלץ להזמין מראש', time:'2–3 שעות', note:'ליד: טמפוזאן מרקטפלייס וגלגל ענק.' },
   { id:'umeda', city:'Osaka', name:'אומדה סקיי בילדינג', lat:34.7053, lng:135.4906, price:'Floating Garden סביב ¥2,000', booking:'מומלץ בערב/שקיעה', time:'1.5–2 שעות', note:'סיום ערב יפה מעל העיר.' },
-  { id:'kobe-city-hall-observation', city:'Kobe', name:'Kobe City Hall Observation Lobby', lat:34.6898, lng:135.1955, price:'חינם', booking:'לא צריך בדרך כלל; לבדוק שעות פתיחה', time:'30–60 דקות', note:'המלצת TikTok: תצפית חינמית על קובה, ההרים והים. מתאים רק אם מוסיפים עצירה בקובה בדרך מאוסקה/הימג׳י.' },
+  { id:'kobe-city-hall-observation', city:'Kobe', name:'תצפית בניין עיריית קובה', lat:34.6898, lng:135.1955, price:'חינם', booking:'לא צריך בדרך כלל; לבדוק שעות פתיחה', time:'30–60 דקות', note:'אטרקציה בחינם: תצפית חינמית על קובה, ההרים והים. מתאים רק אם מוסיפים עצירה בקובה בדרך מאוסקה/הימג׳י.' },
   { id:'himeji', city:'Himeji', name:'טירת הימג׳י', lat:34.8394, lng:134.6939, price:'טירה ¥1,000; טירה+קוקואן ¥1,050', booking:'לא חובה', time:'2–3 שעות', note:'אחת הטירות המרשימות והשמורות ביפן.' },
   { id:'kokoen', city:'Himeji', name:'גני קוקואן', lat:34.8391, lng:134.6898, price:'¥310 לבד או קומבו עם הטירה', booking:'לא צריך', time:'1 שעה', note:'ממש ליד הטירה — לא לדלג אם כבר שם.' }
 ];
@@ -293,32 +284,32 @@ const nearbyGuide = [
     bestFor:'שיבויה סקיי, קניות, דון קיחוטה וערב צעיר',
     restaurants:['Uobei Shibuya Dogenzaka — סושי מסוע/מסך מעולה לקבוצה', 'Ichiran Shibuya', 'Gyukatsu Motomura Shibuya'],
     sushi:['Uobei Shibuya Dogenzaka', 'Sushiro Shibuya', 'Kura Sushi באזור שיבויה/הרג׳וקו'],
-    coffee:['Starbucks Reserve Roastery Tokyo - Nakameguro', 'Starbucks Shibuya Tsutaya / אזור מעבר החצייה', 'Streamer Coffee Company', 'Blue Bottle Shibuya'],
-    markets:['Harry Potter Store Harajuku', 'Cas:pace Tokyo — בניית כיסוי לטלפון', 'Sanrio / Hello Kitty Store & Cafe', 'MEGA Don Quijote Shibuya', 'Shibuya 109', 'Shibuya PARCO', 'Nintendo Tokyo / Pokémon Center Shibuya']
+    coffee:['סטארבקס ריזרב רוסטרי טוקיו - נאקמגורו', 'סטארבקס שיבויה צוטאיה / אזור מעבר החצייה', 'סטרימר קופי', 'בלו בוטל שיבויה'],
+    markets:['חנות הארי פוטר בהרג׳וקו', 'קייספייס — בניית כיסוי לטלפון', 'חנות וקפה סנריו / הלו קיטי', 'מגה דון קיחוטה שיבויה', 'שיבויה 109', 'שיבויה פארקו', 'נינטנדו טוקיו / מרכז פוקימון שיבויה']
   },
   {
     area:'איקבוקורו / ריוגוקו',
     bestFor:'אנימה, טמגוצ׳י וסומו בחינם',
-    restaurants:['Ramen / אוכל מהיר סביב Ikebukuro Station', 'מסעדות סביב Sunshine City', 'Chanko Nabe באזור Ryogoku אם רוצים אוכל סומו'],
-    sushi:['Kura Sushi Ikebukuro', 'Sushiro Ikebukuro', 'סושי סביב Ryogoku Station'],
-    coffee:['Starbucks Ikebukuro', 'קפה בתוך Sunshine City', 'בתי קפה סביב Ryogoku Station'],
-    markets:['Anime Tokyo Station', 'Tamagotchi Factory', 'Sunshine City Ikebukuro', 'Sumo Museum Ryogoku']
+    restaurants:['ראמן / אוכל מהיר סביב תחנת איקבוקורו', 'מסעדות סביב סאנשיין סיטי', 'צ׳אנקו נאבה באזור ריוגוקו אם רוצים אוכל סומו'],
+    sushi:['קורה סושי איקבוקורו', 'סושירו איקבוקורו', 'סושי סביב תחנת ריוגוקו'],
+    coffee:['סטארבקס איקבוקורו', 'קפה בתוך סאנשיין סיטי', 'בתי קפה סביב תחנת ריוגוקו'],
+    markets:['תחנת האנימה של טוקיו', 'מפעל טמגוצ׳י', 'סאנשיין סיטי איקבוקורו', 'מוזיאון הסומו ריוגוקו']
   },
   {
     area:'אסאקוסה וסקייטרי',
     bestFor:'מקדשים, אוכל רחוב ומתנות',
     restaurants:['רחוב Nakamise — חטיפים ומתוקים יפניים', 'Asakusa Gyukatsu', 'Tempura / Soba מסביב לסנסו־ג׳י'],
     sushi:['Kura Sushi Asakusa ROX', 'Sushiro / סניפים באזור Ueno-Asakusa', 'מסעדות סושי קטנות ליד התחנה'],
-    coffee:['Starbucks Asakusa Kaminarimon', 'קפה סביב Sumida Park', 'קפה בתוך Tokyo Solamachi'],
-    markets:['Tokyo Solamachi — קניון ענק ליד Skytree', 'Don Quijote Asakusa', 'חנויות מזכרות ב־Nakamise-dori']
+    coffee:['סטארבקס אסאקוסה קמינרימון', 'קפה סביב פארק סומידה', 'קפה בתוך טוקיו סולמאצ׳י'],
+    markets:['טוקיו סולמאצ׳י — קניון ענק ליד סקייטרי', 'דון קיחוטה אסאקוסה', 'חנויות מזכרות ברחוב נאקמיסה']
   },
   {
     area:'גינזה / תחנת טוקיו / ניהונבאשי',
     bestFor:'פוקימון קפה, קניות יפות ואוכל מסודר',
-    restaurants:['Tokyo Station Ramen Street', 'Depachika — קומות אוכל בכלבו', 'מסעדות סביב Nihonbashi Takashimaya'],
+    restaurants:['רחוב הראמן בתחנת טוקיו', 'דפצ׳יקה — קומות אוכל בכלבו', 'מסעדות סביב ניהונבאשי טקאשימאיה'],
     sushi:['Sushiro Yurakucho/Ginza area', 'Kura Sushi Ginza area', 'סושי בעמידה באזור Yurakucho'],
-    coffee:['Starbucks Reserve / Ginza area', 'Blue Bottle Ginza', 'קפה בתחנת טוקיו'],
-    markets:['Ginza Six', 'Itoya Ginza', 'Nihonbashi Takashimaya', 'Tokyo Character Street']
+    coffee:['סטארבקס ריזרב / אזור גינזה', 'בלו בוטל גינזה', 'קפה בתחנת טוקיו'],
+    markets:['גינזה סיקס', 'איטויה גינזה', 'ניהונבאשי טקאשימאיה', 'רחוב הדמויות בתחנת טוקיו']
   },
   {
     area:'קיוטו — גיון / קוואראמאצ׳י / שוק נישיקי',
@@ -331,10 +322,10 @@ const nearbyGuide = [
   {
     area:'אוסקה — נאמבה / דוטונבורי',
     bestFor:'אוכל רחוב, קניות ודון קיחוטה',
-    restaurants:['Ramen Ichiza Osaka — 9 חנויות ראמן במקום אחד', 'Dotonbori — טאקויאקי, אוקונומיאקי וקושיקאצו', 'Hozenji Yokocho — סמטה יפה לאוכל', 'Ichiran Dotonbori'],
-    sushi:['Kura Sushi Dotonbori', 'Sushiro Namba', 'Daiki Suisan / סושי מסוע פופולרי'],
-    coffee:['Starbucks Tsutaya Ebisu-bashi / Dotonbori', 'Streamer Coffee Namba', 'בתי קפה ב־Namba Parks'],
-    markets:['Don Quijote Dotonbori', 'Kuromon Market', 'Shinsaibashi-suji Shopping Street', 'Namba Parks / Takashimaya Osaka']
+    restaurants:['ראמן איצ׳יזה אוסקה — 9 חנויות ראמן במקום אחד', 'דוטונבורי — טאקויאקי, אוקונומיאקי וקושיקאצו', 'הוזנג׳י יוקוצ׳ו — סמטה יפה לאוכל', 'איצ׳ירן דוטונבורי'],
+    sushi:['קורה סושי דוטונבורי', 'סושירו נאמבה', 'דאיקי סויסאן / סושי מסוע פופולרי'],
+    coffee:['סטארבקס צוטאיה אביסו־באשי / דוטונבורי', 'סטרימר קופי נאמבה', 'בתי קפה בנאמבה פארקס'],
+    markets:['דון קיחוטה דוטונבורי', 'שוק קורומון', 'רחוב הקניות שינסהיבאשי־סוג׳י', 'נאמבה פארקס / טקאשימאיה אוסקה']
   },
   {
     area:'האקונה',
@@ -385,7 +376,7 @@ const pageEnhancements = {
   ],
   shopping: [
     { title:'קניות חכמות', text:'דון קיחוטה טוב לקניות גדולות ומשונות, אבל לפעמים בתי מרקחת כמו Matsumoto Kiyoshi / Welcia זולים יותר לקוסמטיקה ופארם.' },
-    { title:'לפני קופה', text:'לבדוק Tax Free, לשמור דרכון, ולוודא שהמוצרים שאתן צריכות בטיול עצמו לא נארזים בשקית אטומה שאסור לפתוח עד היציאה מיפן.' }
+    { title:'לפני קופה', text:'לבדוק החזר מס לתיירים, לשמור דרכון, ולוודא שהמוצרים שאתן צריכות בטיול עצמו לא נארזים בשקית אטומה שאסור לפתוח עד היציאה מיפן.' }
   ]
 };
 
@@ -406,7 +397,7 @@ const donkiShoppingGuide = [
   {
     icon: '🍫',
     category: 'חטיפים ומתוקים',
-    items: ['KitKat בטעמים יפניים', 'Tokyo Banana', 'Pocky / Pretz', 'Hi-Chew', 'Matcha snacks', 'חטיפי אורז וסנביי'],
+    items: ['קיטקט בטעמים יפניים', 'טוקיו בננה', 'פוקי / פרץ', 'היי־צ׳ו', 'חטיפי מאצ׳ה', 'חטיפי אורז וסנביי'],
     tip: 'לקנות חטיפים קלים בסוף הטיול כדי שלא יתפסו מקום במזוודה כל הדרך.'
   },
   {
@@ -430,7 +421,7 @@ const donkiShoppingGuide = [
   {
     icon: '🧾',
     category: 'לפני הקופה',
-    items: ['להביא דרכון ל־Tax Free', 'להשוות מחיר אם זה מוצר יקר', 'לא לפתוח שקית Tax Free סגורה עד היציאה מיפן', 'לבדוק מקום במזוודה'],
+    items: ['להביא דרכון להחזר מס לתיירים', 'להשוות מחיר אם זה מוצר יקר', 'לא לפתוח שקית החזר מס סגורה עד היציאה מיפן', 'לבדוק מקום במזוודה'],
     tip: 'דון קיחוטה יכול להיות כאוס מתוק — לבוא עם רשימה קצרה ולסמן מה באמת חשוב.'
   }
 ];
@@ -438,38 +429,38 @@ const donkiShoppingGuide = [
 const tiktokPicks = [
   {
     icon: '☕',
-    title: 'Starbucks Reserve Roastery Tokyo',
-    area: 'Nakameguro, Tokyo',
+    title: 'סטארבקס ריזרב רוסטרי טוקיו',
+    area: 'נאקמגורו, טוקיו',
     source: 'המלצה מהטיקטוק',
-    text: 'סניף ענק ומעוצב של סטארבקס ריזרב, עם כמה קומות, מאפים, קפה מיוחד, מוצרי Roastery ותצוגה יפה של קליית/הכנת קפה. מתאים להפסקה מיוחדת באזור נאקמגורו.',
+    text: 'סניף ענק ומעוצב של סטארבקס ריזרב, עם כמה קומות, מאפים, קפה מיוחד, מוצרי רוסטרי ותצוגה יפה של קליית והכנת קפה. מתאים להפסקה מיוחדת באזור נאקמגורו.',
     bestTime: 'כדאי להגיע בבוקר או אחר הצהריים מוקדם כדי להימנע מתור ארוך. יפה במיוחד אם משלבים עם הליכה ליד נהר Meguro.',
     mapsQuery: 'Starbucks Reserve Roastery Tokyo Nakameguro',
     tiktokUrl: 'https://www.tiktok.com/@asukunavi.travel/video/7674064889429626133?is_from_webapp=1&sender_device=pc&web_id=7675005023198086663'
   },
   {
     icon: '🍜',
-    title: 'Ramen Ichiza Osaka',
-    area: 'Dotonbori / Namba, Osaka',
+    title: 'ראמן איצ׳יזה אוסקה',
+    area: 'דוטונבורי / נאמבה, אוסקה',
     source: 'ראמן מומלץ',
     text: 'מתחם ראמן שמרכז 9 חנויות תחת קורת גג אחת — דרך מעולה לטעום כמה סגנונות במקום אחד, מטסוקמן עשיר ועד צ׳יקן פאייטן וראמן בקר.',
-    bestTime: 'מומלץ לשלב בערב דוטונבורי או אחרי קניות בנאמבה. הטופ 3: Bettei Takei לטסוקמן דגים עשיר, Kaneda לצ׳יקן פאייטן קרמי, Gyukkoshi ל־Wagyu/Beef paitan ramen.',
+    bestTime: 'מומלץ לשלב בערב דוטונבורי או אחרי קניות בנאמבה. הטופ 3: בטיי טקיי לטסוקמן דגים עשיר, קאנדה לצ׳יקן פאייטן קרמי, וגיוקושי לראמן בקר/ואגיו עשיר.',
     mapsQuery: 'Ramen Ichiza Osaka Dotonbori',
     tiktokUrl: 'https://www.google.com/maps/search/?api=1&query=Ramen%20Ichiza%20Osaka%20Dotonbori'
   },
   {
     icon: '🎬',
-    title: 'Anime Tokyo Station',
-    area: 'Ikebukuro, Tokyo',
+    title: 'תחנת האנימה של טוקיו',
+    area: 'איקבוקורו, טוקיו',
     source: 'אטרקציה בחינם',
-    text: 'מרכז אנימה חינמי באיקבוקורו עם תערוכות, עבודות אנימה ואירועים מתחלפים. טוב לעצירה קצרה אם אתן באזור Sunshine City / איקבוקורו.',
-    bestTime: 'כ־4 דקות הליכה מתחנת Ikebukuro. לשלב עם Tamagotchi Factory או קניות באזור.',
+    text: 'מרכז אנימה חינמי באיקבוקורו עם תערוכות, עבודות אנימה ואירועים מתחלפים. טוב לעצירה קצרה אם אתן באזור סאנשיין סיטי / איקבוקורו.',
+    bestTime: 'כ־4 דקות הליכה מתחנת איקבוקורו. לשלב עם מפעל טמגוצ׳י או קניות באזור.',
     mapsQuery: 'Anime Tokyo Station Ikebukuro Tokyo',
     tiktokUrl: 'https://www.tiktok.com/@japan_travel_guide_ctj/photo/7673587692805836052'
   },
   {
     icon: '🤼',
-    title: 'Sumo Museum',
-    area: 'Ryogoku, Tokyo',
+    title: 'מוזיאון הסומו',
+    area: 'ריוגוקו, טוקיו',
     source: 'אטרקציה בחינם',
     text: 'מוזיאון קטן וחינמי על עולם הסומו: היסטוריה, טקסים, תמונות ופריטים מהטורנירים. מקום קצר אבל מיוחד תרבותית.',
     bestTime: 'כדאי לשלב אם כבר באזור אסאקוסה/סומידה או בדרך בין אטרקציות. לבדוק שעות פתיחה לפני הגעה.',
@@ -478,39 +469,39 @@ const tiktokPicks = [
   },
   {
     icon: '🌃',
-    title: 'Kobe City Hall Observation Lobby',
-    area: 'Sannomiya, Kobe',
+    title: 'תצפית בניין עיריית קובה',
+    area: 'סאנומיה, קובה',
     source: 'אטרקציה בחינם',
     text: 'תצפית חינמית על קובה, ההרים והים. לא חובה במסלול המקורי, אבל שווה אם מוסיפים עצירה בקובה בדרך מאוסקה או מהימג׳י.',
-    bestTime: 'כ־6 דקות הליכה מתחנת Sannomiya. יפה ביום וגם בערב, אם יש זמן בלי ללחוץ את המסלול.',
+    bestTime: 'כ־6 דקות הליכה מתחנת סאנומיה. יפה ביום וגם בערב, אם יש זמן בלי ללחוץ את המסלול.',
     mapsQuery: 'Kobe City Hall Observation Lobby',
     tiktokUrl: 'https://www.tiktok.com/@japan_travel_guide_ctj/photo/7673587692805836052'
   },
   {
     icon: '🎀',
-    title: 'Sanrio / Hello Kitty Store & Cafe',
-    area: 'Tokyo',
-    source: 'Don’t miss these stores in Tokyo',
-    text: 'חנות/קפה ורוד וצבעוני של Sanrio עם Hello Kitty, מוצרים חמודים, צילום וקניות. מושלם אם אוהבות דמויות וקוואי.',
+    title: 'חנות וקפה סנריו / הלו קיטי',
+    area: 'טוקיו',
+    source: 'חנות מומלצת בטוקיו',
+    text: 'חנות/קפה ורוד וצבעוני של סנריו עם הלו קיטי, מוצרים חמודים, צילום וקניות. מושלם אם אוהבות דמויות וקוואי.',
     bestTime: 'לשלב ביום הרג׳וקו/שיבויה או איקבוקורו לפי הסניף שתבחרו. אם נכנסות לקפה — לבוא עם סבלנות לתורים.',
     mapsQuery: 'Sanrio Cafe Tokyo Hello Kitty',
     tiktokUrl: 'https://www.tiktok.com/@dacota.mae/photo/7663879072665046285'
   },
   {
     icon: '🪄',
-    title: 'Harry Potter Store Harajuku',
-    area: 'Harajuku, Tokyo',
-    source: 'Don’t miss these stores in Tokyo',
-    text: 'חנות גדולה לחובבי הארי פוטר, עם מרצ׳נדייז בלעדי, אזורי צילום ואווירת הוגוורטס. לפי ההמלצה יש גם Butterbeer Bar.',
+    title: 'חנות הארי פוטר בהרג׳וקו',
+    area: 'הרג׳וקו, טוקיו',
+    source: 'חנות מומלצת בטוקיו',
+    text: 'חנות גדולה לחובבי הארי פוטר, עם מרצ׳נדייז בלעדי, אזורי צילום ואווירת הוגוורטס. לפי ההמלצה יש גם בר בירצפת.',
     bestTime: 'להכניס ביום הרג׳וקו/אומוטסנדו. מתאים גם כעצירת קניות קצרה וגם כחוויה למעריצים.',
     mapsQuery: 'Harry Potter Store Harajuku Tokyo',
     tiktokUrl: 'https://www.tiktok.com/@dacota.mae/photo/7663879072665046285'
   },
   {
     icon: '📱',
-    title: 'Cas:pace',
-    area: 'Tokyo',
-    source: 'Don’t miss these stores in Tokyo',
+    title: 'קייספייס — עיצוב כיסוי לטלפון',
+    area: 'טוקיו',
+    source: 'חנות מומלצת בטוקיו',
     text: 'חנות שבה אפשר לבנות/לעצב כיסוי טלפון אישי — מזכרת קטנה, שימושית וממש מתאימה לטיול.',
     bestTime: 'לשלב ביום קניות בטוקיו. כדאי לבדוק מחיר וזמן הכנה במקום לפני שמתחייבים.',
     mapsQuery: 'Cas:pace Tokyo phone case',
@@ -518,11 +509,11 @@ const tiktokPicks = [
   },
   {
     icon: '🐣',
-    title: 'Tamagotchi Factory',
-    area: 'Tokyo',
-    source: 'Don’t miss these stores in Tokyo',
+    title: 'מפעל טמגוצ׳י',
+    area: 'טוקיו',
+    source: 'חנות מומלצת בטוקיו',
     text: 'חוויה צבעונית שבה אפשר להכין/לבנות טמגוצ׳י אישי — נוסטלגי, חמוד ומעולה למי שאוהבת דמויות יפניות.',
-    bestTime: 'לשלב עם איקבוקורו, Anime Tokyo Station או Sunshine City. לבדוק עומסים אם מגיעות בסופ״ש.',
+    bestTime: 'לשלב עם איקבוקורו, תחנת האנימה של טוקיו או סאנשיין סיטי. לבדוק עומסים אם מגיעות בסופ״ש.',
     mapsQuery: 'Tamagotchi Factory Tokyo',
     tiktokUrl: 'https://www.tiktok.com/@dacota.mae/photo/7663879072665046285'
   }
@@ -1021,7 +1012,7 @@ function App(){
                 <small>{pick.bestTime}</small>
                 <div className="pickLinks">
                   <a href={googleMapsSearchUrl(pick.mapsQuery)} target="_blank" rel="noreferrer">פתיחה בגוגל מפות <ExternalLink size={13}/></a>
-                  <a href={pick.tiktokUrl} target="_blank" rel="noreferrer">פתיחת הסרטון <ExternalLink size={13}/></a>
+                  <a href={pick.tiktokUrl} target="_blank" rel="noreferrer">פתיחה בטיקטוק <ExternalLink size={13}/></a>
                 </div>
               </div>
             </article>
