@@ -1,0 +1,20 @@
+{
+  "name": "יפן - הטיול הגדול התחלנו !",
+  "short_name": "הטיול הגדול",
+  "description": "יפן - הטיול הגדול התחלנו !",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7efe8",
+  "theme_color": "#d94f45",
+  "dir": "rtl",
+  "lang": "he",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
