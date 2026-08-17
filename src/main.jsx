@@ -421,7 +421,7 @@ function getMarkerLatLng(place, visiblePlaces) {
   return [place.lat + Math.sin(angle) * offset, place.lng + Math.cos(angle) * offset];
 }
 
-function TripMap({ places: visiblePlaces, selectedId, onSelect }) {
+function TripMap({ places: visiblePlaces, selectedId, onSelect, isActive }) {
   const mapNodeRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
@@ -476,6 +476,21 @@ function TripMap({ places: visiblePlaces, selectedId, onSelect }) {
       map.fitBounds(bounds, { padding: [36, 36], maxZoom: 13 });
     }
   }, [visiblePlaces, selectedId, onSelect]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !isActive) return;
+    const timer = window.setTimeout(() => {
+      map.invalidateSize();
+      const markerPositions = visiblePlaces.map(place => getMarkerLatLng(place, visiblePlaces));
+      if (markerPositions.length === 1) {
+        map.setView(markerPositions[0], 14);
+      } else if (markerPositions.length > 1) {
+        map.fitBounds(markerPositions, { padding: [36, 36], maxZoom: 13 });
+      }
+    }, 120);
+    return () => window.clearTimeout(timer);
+  }, [isActive, visiblePlaces]);
 
   return <div ref={mapNodeRef} className="map liveMap" aria-label="מפה אינטראקטיבית עם נקודות" />;
 }
@@ -773,7 +788,7 @@ function App(){
         </div>
 
         <div className="mapWrap">
-          <TripMap places={filtered} selectedId={selected.id} onSelect={setSelectedId} />
+          <TripMap places={filtered} selectedId={selected.id} onSelect={setSelectedId} isActive={activePage === 'map'} />
         </div>
         <div className="mapLegend" aria-label="מקרא אייקונים">
           {categories.map(category => (
