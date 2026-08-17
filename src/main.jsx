@@ -1006,10 +1006,6 @@ function App(){
             </article>
           ))}
         </div>
-        <div className="tiktokNote">
-          <b>🎥 המלצות מטיקטוק</b>
-          <span>אין לי גישה אוטומטית לתיקיית הטיקטוק הפרטית שלך. שלחי לי קישורים לסרטונים, צילומי מסך או רשימת מוצרים — ואני אעלה לאתר “נבחר מטיקטוק” עם המוצרים, איפה לקנות ולמה שווה לשים לב.</span>
-        </div>
         <div className="tiktokPicks">
           {tiktokPicks.map(pick => (
             <article key={pick.title}>
