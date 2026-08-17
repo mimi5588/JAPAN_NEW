@@ -56,6 +56,7 @@ const places = [
   { id:'tsutenkaku', city:'Osaka', name:'מגדל צוטנקאקו ושינסקאי', lat:34.6525, lng:135.5063, price:'תצפית סביב ¥1,000+', booking:'לא חובה', time:'2 שעות', note:'אזור רטרו, קושיקאצו וסמטת ג׳אנג׳אן יוקוצ׳ו.' },
   { id:'kuromon', city:'Osaka', name:'שוק קורומון', lat:34.6646, lng:135.5063, price:'חינם; אוכל בתשלום', booking:'לא צריך', time:'1.5–2 שעות', note:'לשלב עם נאמבה ודוטונבורי.' },
   { id:'dotonbori', city:'Osaka', name:'שינסהיבאשי ודוטונבורי', lat:34.6687, lng:135.5010, price:'חינם', booking:'לא צריך', time:'3–4 שעות', note:'שלט גליקו, אוכל רחוב וסמטת הוזנג׳י יוקוצ׳ו.' },
+  { id:'ramen-ichiza', city:'Osaka', name:'Ramen Ichiza Osaka', lat:34.6689, lng:135.5015, price:'בערך ¥1,000–¥2,500 למנה לפי דוכן', booking:'לא צריך בדרך כלל; ייתכנו תורים', time:'1–1.5 שעות', note:'המלצת TikTok: מתחם ראמן עם 9 חנויות תחת קורת גג אחת ליד דוטונבורי. מומלץ לבדוק את Bettei Takei לטסוקמן דגים עשיר, Kaneda לצ׳יקן פאייטן קרמי, ו־Gyukkoshi לראמן Wagyu/בקר.' },
   { id:'donki-dotonbori', city:'Osaka', name:'דון קיחוטה דוטונבורי', lat:34.6691, lng:135.5031, price:'כניסה חינם; קניות בתשלום', booking:'לא צריך', time:'1–2 שעות', note:'אחד הסניפים הכי מפורסמים, ממש ליד התעלה. לשלב בערב אוסקה עם דוטונבורי.' },
   { id:'namba-parks', city:'Osaka', name:'נאמבה פארקס / שינסהיבאשי סוז׳י', lat:34.6617, lng:135.5016, price:'חינם; קניות בתשלום', booking:'לא צריך', time:'2–3 שעות', note:'מרכזי קניות גדולים ונוחים סביב נאמבה, כולל רחוב קניות מקורה ארוך.' },
   { id:'shitennoji', city:'Osaka', name:'מקדש שיטנו־ג׳י', lat:34.6539, lng:135.5169, price:'חלקים חינם; גנים/אולמות סביב ¥300–¥500', booking:'לא צריך', time:'1–1.5 שעות', note:'אחד המקדשים העתיקים ביפן.' },
@@ -300,7 +301,7 @@ const nearbyGuide = [
   {
     area:'אוסקה — נאמבה / דוטונבורי',
     bestFor:'אוכל רחוב, קניות ודון קיחוטה',
-    restaurants:['Dotonbori — טאקויאקי, אוקונומיאקי וקושיקאצו', 'Hozenji Yokocho — סמטה יפה לאוכל', 'Ichiran Dotonbori'],
+    restaurants:['Ramen Ichiza Osaka — 9 חנויות ראמן במקום אחד', 'Dotonbori — טאקויאקי, אוקונומיאקי וקושיקאצו', 'Hozenji Yokocho — סמטה יפה לאוכל', 'Ichiran Dotonbori'],
     sushi:['Kura Sushi Dotonbori', 'Sushiro Namba', 'Daiki Suisan / סושי מסוע פופולרי'],
     coffee:['Starbucks Tsutaya Ebisu-bashi / Dotonbori', 'Streamer Coffee Namba', 'בתי קפה ב־Namba Parks'],
     markets:['Don Quijote Dotonbori', 'Kuromon Market', 'Shinsaibashi-suji Shopping Street', 'Namba Parks / Takashimaya Osaka']
@@ -414,6 +415,16 @@ const tiktokPicks = [
     bestTime: 'כדאי להגיע בבוקר או אחר הצהריים מוקדם כדי להימנע מתור ארוך. יפה במיוחד אם משלבים עם הליכה ליד נהר Meguro.',
     mapsQuery: 'Starbucks Reserve Roastery Tokyo Nakameguro',
     tiktokUrl: 'https://www.tiktok.com/@asukunavi.travel/video/7674064889429626133?is_from_webapp=1&sender_device=pc&web_id=7675005023198086663'
+  },
+  {
+    icon: '🍜',
+    title: 'Ramen Ichiza Osaka',
+    area: 'Dotonbori / Namba, Osaka',
+    source: 'המלצת ראמן מהרשימה שלך',
+    text: 'מתחם ראמן שמרכז 9 חנויות תחת קורת גג אחת — דרך מעולה לטעום כמה סגנונות במקום אחד, מטסוקמן עשיר ועד צ׳יקן פאייטן וראמן בקר.',
+    bestTime: 'מומלץ לשלב בערב דוטונבורי או אחרי קניות בנאמבה. הטופ 3: Bettei Takei לטסוקמן דגים עשיר, Kaneda לצ׳יקן פאייטן קרמי, Gyukkoshi ל־Wagyu/Beef paitan ramen.',
+    mapsQuery: 'Ramen Ichiza Osaka Dotonbori',
+    tiktokUrl: 'https://www.google.com/maps/search/?api=1&query=Ramen%20Ichiza%20Osaka%20Dotonbori'
   }
 ];
 
