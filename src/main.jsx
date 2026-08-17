@@ -669,6 +669,11 @@ function App(){
               </div>
             ))}
           </div>
+          {editMode && (
+            <button className="addInsideDay" onClick={() => addScheduleItem(day.day)}>
+              ➕ הוספת אטרקציה / מיקום / פעילות ליום {day.day}
+            </button>
+          )}
           {!editMode && <ul>{day.items.map((item,i)=><li key={i}>{item}</li>)}</ul>}
         </article>)}
       </aside>
