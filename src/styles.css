@@ -43,6 +43,10 @@ h2{font-size:28px;margin:6px 0 16px}
 .dayPicker{display:none;gap:8px;overflow:auto;padding:0 0 12px;margin-bottom:10px;scrollbar-width:thin}
 .dayPicker button{white-space:nowrap;border-radius:999px;padding:10px 14px;background:#fff;color:var(--indigo)}
 .dayPicker button.selectedDay{background:var(--pink);color:#fff;border-color:var(--pink)}
+.editToolbar{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 10px}
+.editToolbar button{background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 14px;color:var(--indigo);font-weight:900}
+.editToolbar button.activeEdit{background:var(--pink);color:#fff;border-color:var(--pink)}
+.editHint{background:#fff7d6;border:1px solid #f6df8a;border-radius:18px;padding:11px 14px;color:#7a4d00!important;font-weight:800;line-height:1.5}
 .day{padding:18px;margin-bottom:14px;border-right:6px solid transparent}
 .day:hover{border-right-color:var(--pink)}
 .dayTop{display:flex;justify-content:space-between;color:var(--pink);font-weight:900}
@@ -54,6 +58,14 @@ h2{font-size:28px;margin:6px 0 16px}
 .scheduleItem strong{grid-row:span 2;color:var(--pink);font-weight:900;direction:ltr;text-align:left}
 .scheduleItem span{font-weight:900;color:var(--indigo)}
 .scheduleItem small{color:var(--muted);line-height:1.45}
+.dayEditor{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:12px 0}
+.dayEditor label,.editingScheduleItem{color:var(--indigo);font-weight:900}
+.dayEditor label:last-child{grid-column:1/-1}
+.dayEditor input,.dayEditor textarea,.editingScheduleItem input,.editingScheduleItem textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:#f8fbff;color:var(--indigo);padding:11px 12px;font:inherit;font-weight:800;margin-top:6px}
+.dayEditor textarea,.editingScheduleItem textarea{min-height:82px;resize:vertical}
+.editingScheduleItem{grid-template-columns:90px 1fr;gap:10px}
+.editingScheduleItem textarea{grid-column:1/-1}
+.editingScheduleItem button{grid-column:1/-1;background:#fff0f8;color:var(--pink);border:1px solid #ffd0e8;border-radius:999px;padding:9px 12px;text-align:center}
 ul{margin:0;padding:0 20px 0 0;line-height:1.65}
 .mapPanel{background:#fff;border:1px solid var(--line);border-radius:32px;padding:18px;box-shadow:0 24px 80px #00206016}
 .toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center}
@@ -136,6 +148,8 @@ footer{margin:28px 0 8px;color:var(--muted);text-align:center}
   .itinerary .day{display:none}
   .itinerary .day.visibleDay{display:block}
   .scheduleItem{grid-template-columns:68px 1fr}
+  .dayEditor,.editingScheduleItem{grid-template-columns:1fr}
+  .editingScheduleItem textarea,.editingScheduleItem button{grid-column:auto}
   .places{grid-template-columns:1fr}
   .heroCard{padding:20px}
   .map{height:360px}

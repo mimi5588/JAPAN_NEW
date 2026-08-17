@@ -517,6 +517,22 @@ function App(){
   const [filter, setFilter] = useState('הכל');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [selectedDay, setSelectedDay] = useState(1);
+  const [editMode, setEditMode] = useState(false);
+  const defaultTripDays = useMemo(() => itinerary.map(day => ({
+    ...day,
+    schedule: (dayPlans[day.day] ?? []).map(([time, title, detail]) => ({ time, title, detail }))
+  })), []);
+  const [tripDays, setTripDays] = useState(() => {
+    try {
+      const saved = localStorage.getItem('japan-custom-trip-days-v1');
+      return saved ? JSON.parse(saved) : defaultTripDays;
+    } catch {
+      return defaultTripDays;
+    }
+  });
+  useEffect(() => {
+    localStorage.setItem('japan-custom-trip-days-v1', JSON.stringify(tripDays));
+  }, [tripDays]);
   const selected = places.find(p => p.id === selectedId) ?? places[0];
   const filtered = useMemo(() => {
     return places.filter(p => {
@@ -541,6 +557,33 @@ function App(){
     ['nearby', 'בסביבה'],
     ['shopping', 'קניות']
   ];
+  const updateDay = (dayNumber, field, value) => {
+    setTripDays(days => days.map(day => day.day === dayNumber ? { ...day, [field]: value } : day));
+  };
+  const updateScheduleItem = (dayNumber, index, field, value) => {
+    setTripDays(days => days.map(day => {
+      if (day.day !== dayNumber) return day;
+      const schedule = [...day.schedule];
+      schedule[index] = { ...schedule[index], [field]: value };
+      return { ...day, schedule };
+    }));
+  };
+  const addScheduleItem = (dayNumber) => {
+    setTripDays(days => days.map(day => day.day === dayNumber ? {
+      ...day,
+      schedule: [...day.schedule, { time: '09:00', title: '📍 מיקום חדש', detail: 'להוסיף כאן דרך הגעה, זמן נסיעה ומה עושים במקום.' }]
+    } : day));
+  };
+  const removeScheduleItem = (dayNumber, index) => {
+    setTripDays(days => days.map(day => day.day === dayNumber ? {
+      ...day,
+      schedule: day.schedule.filter((_, itemIndex) => itemIndex !== index)
+    } : day));
+  };
+  const resetPlan = () => {
+    setTripDays(defaultTripDays);
+    localStorage.removeItem('japan-custom-trip-days-v1');
+  };
 
   return <main>
     <nav className="topbar" aria-label="ניווט מהיר">
@@ -577,26 +620,56 @@ function App(){
     <section className="layout">
       <aside className={`itinerary pageSection ${activePage === 'route' ? 'activePage' : ''}`} id="route">
         <h2>המסלול לפי ימים</h2>
+        <div className="editToolbar">
+          <button onClick={() => setEditMode(mode => !mode)} className={editMode ? 'activeEdit' : ''}>
+            {editMode ? 'סיום עריכה' : 'עריכת מסלול'}
+          </button>
+          <button onClick={() => addScheduleItem(selectedDay)}>הוספת מיקום ליום הנבחר</button>
+          <button onClick={resetPlan}>איפוס לברירת מחדל</button>
+        </div>
+        <p className="editHint">השינויים נשמרים אוטומטית בדפדפן שלך. אפשר לערוך אזור, לינה, תיאור, שעות, מיקומים ודרכי הגעה.</p>
         <div className="dayPicker" aria-label="בחירת יום במסלול">
-          {itinerary.map(day => <button key={day.day} onClick={() => setSelectedDay(day.day)} className={selectedDay === day.day ? 'selectedDay' : ''}>
+          {tripDays.map(day => <button key={day.day} onClick={() => setSelectedDay(day.day)} className={selectedDay === day.day ? 'selectedDay' : ''}>
             יום {day.day}
           </button>)}
         </div>
-        {itinerary.map(day => <article className={`day ${selectedDay === day.day ? 'visibleDay' : ''}`} key={day.day}>
+        {tripDays.map(day => <article className={`day ${selectedDay === day.day ? 'visibleDay' : ''}`} key={day.day}>
           <div className="dayTop"><span>יום {day.day}</span><strong>{day.date}</strong></div>
-          <h3>{day.city}</h3>
-          <p>{day.area} · {day.stay}</p>
-          <p className="daySummary">{day.summary}</p>
+          {editMode ? (
+            <div className="dayEditor">
+              <label>עיר / כותרת היום<input value={day.city} onChange={event => updateDay(day.day, 'city', event.target.value)} /></label>
+              <label>אזור ביום<input value={day.area} onChange={event => updateDay(day.day, 'area', event.target.value)} /></label>
+              <label>לינה / הערה<input value={day.stay} onChange={event => updateDay(day.day, 'stay', event.target.value)} /></label>
+              <label>מה צפוי ביום<textarea value={day.summary} onChange={event => updateDay(day.day, 'summary', event.target.value)} /></label>
+            </div>
+          ) : (
+            <>
+              <h3>{day.city}</h3>
+              <p>{day.area} · {day.stay}</p>
+              <p className="daySummary">{day.summary}</p>
+            </>
+          )}
           <div className="daySchedule">
-            {(dayPlans[day.day] ?? []).map(([time, title, detail]) => (
-              <div className="scheduleItem" key={`${day.day}-${time}-${title}`}>
-                <strong>{time}</strong>
-                <span>{title}</span>
-                <small>{detail}</small>
+            {(day.schedule ?? []).map((item, index) => (
+              <div className={`scheduleItem ${editMode ? 'editingScheduleItem' : ''}`} key={`${day.day}-${index}`}>
+                {editMode ? (
+                  <>
+                    <input aria-label="שעה" value={item.time} onChange={event => updateScheduleItem(day.day, index, 'time', event.target.value)} />
+                    <input aria-label="מיקום או פעילות" value={item.title} onChange={event => updateScheduleItem(day.day, index, 'title', event.target.value)} />
+                    <textarea aria-label="דרך הגעה ופרטים" value={item.detail} onChange={event => updateScheduleItem(day.day, index, 'detail', event.target.value)} />
+                    <button onClick={() => removeScheduleItem(day.day, index)}>מחיקה</button>
+                  </>
+                ) : (
+                  <>
+                    <strong>{item.time}</strong>
+                    <span>{item.title}</span>
+                    <small>{item.detail}</small>
+                  </>
+                )}
               </div>
             ))}
           </div>
-          <ul>{day.items.map((item,i)=><li key={i}>{item}</li>)}</ul>
+          {!editMode && <ul>{day.items.map((item,i)=><li key={i}>{item}</li>)}</ul>}
         </article>)}
       </aside>
 
