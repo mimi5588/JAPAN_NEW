@@ -5,6 +5,9 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './styles.css';
 
+const APP_VERSION = '2026-08-17-cache-v9';
+window.__JAPAN_TRIP_VERSION__ = APP_VERSION;
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').then(registration => {
