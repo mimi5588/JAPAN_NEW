@@ -25,6 +25,7 @@ const places = [
   { id:'skytree', city:'Tokyo', name:'טוקיו סקייטרי + סולמאצ׳י', lat:35.7101, lng:139.8107, price:'בערך ¥2,100–¥3,400+ לפי קומבינציה/שעה', booking:'מומלץ להזמין מראש, במיוחד ערב/סופ״ש', time:'2–3 שעות', note:'בערב יש תאורה יפה; ליד: מרכז הקניות סולמאצ׳י ואקווריום סומידה.' },
   { id:'meiji', city:'Tokyo', name:'מקדש מייג׳י', lat:35.6764, lng:139.6993, price:'חינם', booking:'לא צריך', time:'1–1.5 שעות', note:'לשלב עם פארק יויוגי, רחוב טקשיטה ואומוטסנדו.' },
   { id:'harajuku', city:'Tokyo', name:'הרג׳וקו ואומוטסנדו', lat:35.6717, lng:139.7064, price:'חינם', booking:'לא צריך', time:'2–3 שעות', note:'אזור שלם לקניות, קרפים, בתי קפה וחנויות עיצוב.' },
+  { id:'starbucks-reserve-roastery', city:'Tokyo', name:'Starbucks Reserve Roastery Tokyo - נאקמגורו', lat:35.6492, lng:139.6922, price:'כניסה חינם; קפה/מאפים בתשלום', booking:'לא חובה; ייתכנו תורים בשעות עמוסות', time:'1–1.5 שעות', note:'המלצת TikTok: סניף ענק ומעוצב של Starbucks Reserve Roastery ליד נהר Meguro. מתאים להפסקת קפה, צילום וקניית מוצרים מיוחדים של סטארבקס.' },
   { id:'shibuya', city:'Tokyo', name:'מעבר שיבויה + האצ׳יקו', lat:35.6595, lng:139.7005, price:'חינם', booking:'לא צריך', time:'1 שעה', note:'שווה להגיע לפני שיבויה סקיי ולתת זמן לשוטט.' },
   { id:'shibuyasky', city:'Tokyo', name:'שיבויה סקיי בשקיעה', lat:35.6585, lng:139.7020, price:'מבוגר אונליין: כ־¥2,700 עד 14:59 / כ־¥3,400 מ־15:00', booking:'כן — להזמין מראש; שקיעה נחטפת מהר', time:'1.5–2 שעות', note:'לכוון כניסה 60–90 דקות לפני השקיעה.' },
   { id:'tsukiji', city:'Tokyo', name:'שוק צוקיג׳י החיצוני', lat:35.6655, lng:139.7707, price:'חינם; אוכל בתשלום', booking:'לא צריך', time:'1.5–2 שעות', note:'הכי טוב בבוקר. ליד: גני האמאריקיו.' },
@@ -269,7 +270,7 @@ const nearbyGuide = [
     bestFor:'שיבויה סקיי, קניות, דון קיחוטה וערב צעיר',
     restaurants:['Uobei Shibuya Dogenzaka — סושי מסוע/מסך מעולה לקבוצה', 'Ichiran Shibuya', 'Gyukatsu Motomura Shibuya'],
     sushi:['Uobei Shibuya Dogenzaka', 'Sushiro Shibuya', 'Kura Sushi באזור שיבויה/הרג׳וקו'],
-    coffee:['Starbucks Shibuya Tsutaya / אזור מעבר החצייה', 'Streamer Coffee Company', 'Blue Bottle Shibuya'],
+    coffee:['Starbucks Reserve Roastery Tokyo - Nakameguro', 'Starbucks Shibuya Tsutaya / אזור מעבר החצייה', 'Streamer Coffee Company', 'Blue Bottle Shibuya'],
     markets:['MEGA Don Quijote Shibuya', 'Shibuya 109', 'Shibuya PARCO', 'Nintendo Tokyo / Pokémon Center Shibuya']
   },
   {
@@ -400,6 +401,19 @@ const donkiShoppingGuide = [
     category: 'לפני הקופה',
     items: ['להביא דרכון ל־Tax Free', 'להשוות מחיר אם זה מוצר יקר', 'לא לפתוח שקית Tax Free סגורה עד היציאה מיפן', 'לבדוק מקום במזוודה'],
     tip: 'דון קיחוטה יכול להיות כאוס מתוק — לבוא עם רשימה קצרה ולסמן מה באמת חשוב.'
+  }
+];
+
+const tiktokPicks = [
+  {
+    icon: '☕',
+    title: 'Starbucks Reserve Roastery Tokyo',
+    area: 'Nakameguro, Tokyo',
+    source: 'המלצה מטיקטוק ששלחת',
+    text: 'סניף ענק ומעוצב של סטארבקס ריזרב, עם כמה קומות, מאפים, קפה מיוחד, מוצרי Roastery ותצוגה יפה של קליית/הכנת קפה. מתאים להפסקה מיוחדת באזור נאקמגורו.',
+    bestTime: 'כדאי להגיע בבוקר או אחר הצהריים מוקדם כדי להימנע מתור ארוך. יפה במיוחד אם משלבים עם הליכה ליד נהר Meguro.',
+    mapsQuery: 'Starbucks Reserve Roastery Tokyo Nakameguro',
+    tiktokUrl: 'https://www.tiktok.com/@asukunavi.travel/video/7674064889429626133?is_from_webapp=1&sender_device=pc&web_id=7675005023198086663'
   }
 ];
 
@@ -887,6 +901,24 @@ function App(){
         <div className="tiktokNote">
           <b>🎥 המלצות מטיקטוק</b>
           <span>אין לי גישה אוטומטית לתיקיית הטיקטוק הפרטית שלך. שלחי לי קישורים לסרטונים, צילומי מסך או רשימת מוצרים — ואני אעלה לאתר “נבחר מטיקטוק” עם המוצרים, איפה לקנות ולמה שווה לשים לב.</span>
+        </div>
+        <div className="tiktokPicks">
+          {tiktokPicks.map(pick => (
+            <article key={pick.title}>
+              <strong>{pick.icon}</strong>
+              <div>
+                <p>{pick.source}</p>
+                <h4>{pick.title}</h4>
+                <span>{pick.area}</span>
+                <small>{pick.text}</small>
+                <small>{pick.bestTime}</small>
+                <div className="pickLinks">
+                  <a href={googleMapsSearchUrl(pick.mapsQuery)} target="_blank" rel="noreferrer">פתיחה בגוגל מפות <ExternalLink size={13}/></a>
+                  <a href={pick.tiktokUrl} target="_blank" rel="noreferrer">פתיחת הסרטון <ExternalLink size={13}/></a>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
       <div className="extraGrid">
