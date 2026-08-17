@@ -46,6 +46,8 @@ h2{font-size:28px;margin:6px 0 16px}
 .editToolbar{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 10px}
 .editToolbar button{background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 14px;color:var(--indigo);font-weight:900}
 .editToolbar button.activeEdit{background:var(--pink);color:#fff;border-color:var(--pink)}
+.editToolbar .mainEditButton{font-size:17px;padding:13px 20px;background:var(--indigo);color:#fff;border-color:var(--indigo);box-shadow:0 12px 30px #00206024}
+.editToolbar .mainEditButton.activeEdit{background:#22a06b;border-color:#22a06b;color:#fff}
 .editHint{background:#fff7d6;border:1px solid #f6df8a;border-radius:18px;padding:11px 14px;color:#7a4d00!important;font-weight:800;line-height:1.5}
 .day{padding:18px;margin-bottom:14px;border-right:6px solid transparent}
 .day:hover{border-right-color:var(--pink)}

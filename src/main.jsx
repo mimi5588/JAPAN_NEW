@@ -621,13 +621,13 @@ function App(){
       <aside className={`itinerary pageSection ${activePage === 'route' ? 'activePage' : ''}`} id="route">
         <h2>המסלול לפי ימים</h2>
         <div className="editToolbar">
-          <button onClick={() => setEditMode(mode => !mode)} className={editMode ? 'activeEdit' : ''}>
-            {editMode ? 'סיום עריכה' : 'עריכת מסלול'}
+          <button onClick={() => setEditMode(mode => !mode)} className={`mainEditButton ${editMode ? 'activeEdit' : ''}`}>
+            {editMode ? '✅ סיום עריכה ושמירה' : '✏️ עריכת מסלול'}
           </button>
-          <button onClick={() => addScheduleItem(selectedDay)}>הוספת מיקום ליום הנבחר</button>
-          <button onClick={resetPlan}>איפוס לברירת מחדל</button>
+          {editMode && <button onClick={() => addScheduleItem(selectedDay)}>➕ הוספת מיקום ליום הנבחר</button>}
+          {editMode && <button onClick={resetPlan}>↩️ איפוס לברירת מחדל</button>}
         </div>
-        <p className="editHint">השינויים נשמרים אוטומטית בדפדפן שלך. אפשר לערוך אזור, לינה, תיאור, שעות, מיקומים ודרכי הגעה.</p>
+        <p className="editHint">{editMode ? 'מצב עריכה פעיל: אפשר לשנות אזור, לינה, תיאור, שעות, מיקומים ודרכי הגעה. השינויים נשמרים אוטומטית.' : 'כדי לשנות את התכנון לחצי על “עריכת מסלול”.'}</p>
         <div className="dayPicker" aria-label="בחירת יום במסלול">
           {tripDays.map(day => <button key={day.day} onClick={() => setSelectedDay(day.day)} className={selectedDay === day.day ? 'selectedDay' : ''}>
             יום {day.day}
